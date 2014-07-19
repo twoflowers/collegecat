@@ -14,6 +14,7 @@ service mysqld start
 #cp -v /var/www/collegecat/etc_supervisord.conf /etc/supervisord.conf
 #cp -v /var/www/collegecat/supervisord.conf /etc/supervisord.d/collegecat.conf
 cp -fv /var/www/collegecat/upstart.conf /etc/init/collegecat.conf
+service iptables stop;chkconfig iptables off
 start collegecat
 EOF
 
