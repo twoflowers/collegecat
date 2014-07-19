@@ -1,3 +1,2 @@
 Flask
 Flask-WTF
-flask-restful
