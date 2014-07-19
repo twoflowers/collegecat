@@ -164,27 +164,6 @@ class Rating(db.Model):
         return "<Rating {rating} : {comment}>".format(rating=self.rating,
                                                       comment="" if not self.comment else self.comment)
 
-
-class pipl(object):
-    def __init__(self):
-        self.pipl_api_key = app.config['pipl_key']
-        self.pipl_api_url = app.config['pipl_key']
-
-    def search (self, user_id, first_name, last_name, email_address):
-        # @todo update user table with information
-        # @todo clean up the return value
-        url = "%sfirst_name=%s&last_name=%s&email=%s&key=%s&pretty=true" % (
-            self.pipl_api_url,
-            first_name,
-            last_name,
-            email_address,
-            self.pipl_api_key)
-
-        req = requests.get(url)
-
-        return req.json()
-
-
 def sendgrid(object):
     def __init__(self):
         self.email = sendgrid.SendGridClient(app.config['sendgrid_username'], app.config['sendgrid_password'])
