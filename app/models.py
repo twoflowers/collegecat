@@ -3,12 +3,15 @@ import datetime
 
 # Module
 from app import app
+
+# 3rd Party
 from flask.ext.sqlalchemy import SQLAlchemy
+import requests
 
 db = SQLAlchemy(app)
 
 
-class simplify():
+class simplify(object):
     def __init__(self):
 
         simplify.public_key = app.config['simplify_public_key']
@@ -156,8 +159,10 @@ class Rating(db.Model):
 
     def __repr__(self):
         return "<Rating {rating} : {comment}>".format(rating=self.rating,
-                         
-class pipl():                                                     comment="" if not self.comment else self.comment)class pipl():
+                                                      comment="" if not self.comment else self.comment)
+
+
+class pipl(object):
     def __init__(self):
         self.pipl_api_key = app.config['pipl_key']
         self.pipl_api_url = app.config['pipl_key']
