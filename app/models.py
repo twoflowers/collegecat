@@ -13,7 +13,7 @@ import simplify
 db = SQLAlchemy(app)
 
 
-class simplify(object):
+class SimplifyProcessor(object):
     def __init__(self):
 
         simplify.public_key = app.config['simplify_public_key']
@@ -86,6 +86,8 @@ class Location(db.Model):
     def __repr__(self):
         return '<Location {city}, {state} {zip} (gps:{gps})>'.format(city=self.city, state=self.city,
                                                                      zip=zip, gps=self.gps)
+
+
 class Department(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True)
@@ -95,7 +97,6 @@ class Department(db.Model):
 
     def __repr__(self):
         return '<Department %r>' % self.name
-
 
 
 class Subject(db.Model):
@@ -183,7 +184,8 @@ class pipl(object):
 
         return req.json()
 
-def sendgrid():
+
+def sendgrid(object):
     def __init__(self):
         self.email = sendgrid.SendGridClient(app.config['sendgrid_username'], app.config['sendgrid_password'])
 
