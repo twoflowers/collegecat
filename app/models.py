@@ -1,5 +1,6 @@
 import requests, json
 import simplify
+import sendgrid
 from app import app
 
 class simplify():
@@ -79,3 +80,18 @@ class pipl():
         req = requests.get(url)
 
         return req.json()
+
+def sendgrid():
+    def __init__(self):
+        self.email = sendgrid.SendGridClient(app.config['sendgrid_username'], app.config['sendgrid_password'])
+
+    def send(self, to, student_name, tutor_subject, student_email, student_phone):
+
+        message = sendgrid.Mail()
+        message.add_to(to)
+        message.set_subject('College.Cat Request for Tutor')
+        message.set_html(app.config['college_cat_email'] % (student_name, tutor_subject, student_name, student_email, student_phone ))
+        message.set_text(app.config['college_cat_email'] % (student_name, tutor_subject, student_name, student_email, student_phone ))
+        message.set_from('CollegeCat Admin <admin@college.cat>')
+
+        self.email.send(message)
