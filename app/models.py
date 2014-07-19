@@ -1,7 +1,15 @@
+# Built In
+import datetime
+
+# Module
 from app import app
+
+# 3rd Party
 from flask.ext.sqlalchemy import SQLAlchemy
 
+
 db = SQLAlchemy(app)
+
 
 class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -18,14 +26,35 @@ class Location(db.Model):
         self.zip = zip
         self.gps = gps
 
+    def __repr__(self):
+        return '<Location {city}, {state} {zip} (gps:{gps})>'.format(city=self.city, state=self.city,
+                                                                     zip=zip, gps=self.gps)
+
+
 class Department(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True)
 
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<Department %r>' % self.name
+
+
 class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True)
-    # department = db.Column(db.ForeignKey())
+    name = db.Column(db.String(100))
+    course_number = db.Column(db.String(100), nullable=True)
+    department = db.Column(db.ForeignKey(Department.id), nullable=True)
+
+    def __init__(self, name, department):
+        self.name = name
+        self.department = department
+
+    def __repr__(self):
+        return '<Subject %r>' % self.name
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -35,8 +64,9 @@ class User(db.Model):
     payment = db.Column(db.String(100), )
     name = db.Column(db.String(80), unique=True)
     bio = db.Column(db.String(1000), nullable=True)
-    loc = db.Column(db.ForeignKey(Location.id))
-    # subjects =
+    loc = db.Column(db.Integer, db.ForeignKey(Location.id))
+    subjects = db.relationship('Subject', backref='user', lazy='dynamic')
+    created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __init__(self, username, password, email, payment, name):
         self.username = username
@@ -46,33 +76,33 @@ class User(db.Model):
         self.name = name
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User {name}({username}) email: {email} /' \
+               'subjects: {subjects}>'.format(name=self.name, email=self.email,
+                                              username=self.username, subjects=len(self.subjects))
 
-# class codero_api():
-#     def __init__(self):
-#         self.api_key = app.config['CODERO_API_KEY']
-#         self.url = app.config['CODERO_API_URL']
-#
-#     def api_request(self, command, request_type = 'GET', data=''):
-#         if request_type == 'POST':
-#
-#             return requests.post("%s%s" % (self.url, command),data=json.dumps(data),headers={'Authorization':'%s' % self.api_key, 'Content-Type':'application/json'})
-#         elif request_type == 'DELETE':
-#             return requests.delete("%s%s/%s" % (self.url, command, data), headers={'Authorization': '%s' % self.api_key})
-#         else:
-#             return requests.get("%s%s" % (self.url, command), headers={'Authorization': '%s' % self.api_key})
-#
-#
-#     def list_running(self):
-#         return self.api_request('servers').json()
-#
-#     def create_vm(self, hostname, email):
-#         data = {
-#             'name': hostname,
-#             'codelet': app.config['CODERO_API_CODELET'],
-#             'billing': app.config['CODERO_API_BILLING_TYPE']
-#         }
-#         self.api_request('servers', 'POST', data)
-#
-#     def delete_vm(self, vm_id):
-#         self.api_request('servers', 'DELETE', vm_id)
+
+class Tutor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user = db.relationship('Subject', backref='user', lazy='dynamic')
+
+
+class Rating(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user = db.Column(db.Integer, db.ForeignKey(User.id))
+    tutor = db.Column(db.Integer, db.ForeignKey(Tutor.id))
+    rating = db.Column(db.Integer)
+    comment = db.Column(db.String(1000), nullable=True)
+    created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+    def __init__(self, user, tutor, rating, comment):
+        if user is not tutor:
+            self.user = user
+            self.tutor = tutor
+            self.rating = rating
+            self.comment = comment
+        else:
+            raise RuntimeError("Auto-rating prohibited")
+
+    def __repr__(self):
+        return "<Rating {rating} : {comment}>".format(rating=self.rating,
+                                                      comment="" if not self.comment else self.comment)
