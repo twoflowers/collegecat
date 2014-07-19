@@ -28,4 +28,39 @@ function search(subject, location, radius) {
 
 function populate_search_results() {
     // TODO: populate search results
+    var data = [
+        {'name': 'John Q. Public1'},
+        {'name': 'John Q. Public2'},
+    ];
+    results_container = $('#search_results');
+    var results_html = '';
+    for (var index in data) {
+        console.log(data[index]);
+        results_html += tmpl('results_template', data[index]);
+    }
+    results_container.html(results_html);
 }
+
+function get_location() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(show_position);
+    }
+}
+
+function show_position(position) {
+    var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    geocoder = new google.maps.Geocoder();
+    geocoder.geocode({'latLng': latlng}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            if (results[1]) {
+                set_location(results[1].formatted_address);
+            }
+        }
+    });
+}
+
+function set_location(location) {
+    $('#location').val(location);
+}
+
+window.onload = function () { get_location() };

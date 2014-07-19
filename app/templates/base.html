@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>College Cat</title>
+    <title>college.cat</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,9 +16,10 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <style type="text/css">
           body {
-            padding-top: 150px;
+            padding-top: 50px;
             padding-bottom: 40px;
             background: url(/static/img/blurtunnel.jpg) no-repeat center center fixed;
             -webkit-background-size: cover;
@@ -74,16 +75,16 @@
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container-narrow">
       <div class="navbar-header">
-        <div class="navbar-left"><a class="navbar-brand" href="/"><img src="/static/img/cat.png" style="margin-top: -7px;"> College&nbsp;Cat</a></div>
+        <div class="navbar-left"><a class="navbar-brand" href="/"><img src="/static/img/cat.png" style="margin-top: -7px;"> college.cat</a></div>
         <div class="navbar-left">
           <form class="form-inline navbar-form" role="form">
             <div class="form-group">
               <!-- search box -->
-              <input id="search" name="search" type="text" class="form-control pull-left visible" placeholder="subject, e.g. math, spanish, etc...">
+              <input id="search" name="search" type="text" class="form-control pull-left visible" placeholder="subject, e.g. math, spanish, etc..." style="width: 240px;">
             </div>
             <div class="form-group">
               <!-- location box -->
-              <input id="location" name="location" type="text" class="form-control pull-left visible" placeholder="location, e.g. Kansas City">
+              <input id="location" name="location" type="text" class="form-control pull-left visible" placeholder="location, e.g. Kansas City" style="width: 145px;">
             </div>
             <!-- radius button -->
             <div class="btn-group">
@@ -114,20 +115,30 @@
     </div><!-- end of navbar -->
 
     <div class="container-narrow">
-      <h1 class="white center">Sign up right MEOW!</h1>
-      <p class="lead white center">Tuna flavored treats!</p>
+      <h2 class="white center">Register right MEOW!</h2>
+      <p class="lead white center">We have tuna flavored treats!</p>
     </div>
 
-    <div class="container-narrow">
+    <div class="container-narrow" id="search_results">
+    </div>
+
+    <!--{% block content %}{% endblock %}-->
+
+    <div class="footer">
+      <p class="center white visible">&copy;2014 college cat corpurrration</p>
+      <p class="center visible"><img src="/static/img/poweredby.png"></p>
+    </div>
+  </body>
+  <script type="text/html" id="results_template">
       <div class="row well" style="vertical-align: middle">
-        <div class="col-lg-2 pull-left center vcenter">
-          <img src="/static/img/profile-placeholder.png">
+        <div class="col-lg-2 pull-left center">
+          <img src="/static/img/profile-placeholder.png"><br>
           <button class="btn btn-warning margin-top-10">Contact</button>
         </div>
         <div class="col-lg-7">
           <div class="container-fluid">
             <div class="row">
-              <h4 class="">John Q. Public </h4>
+              <h4 class=""><%=name%> </h4>
 
               <h4 class="">
                 <i class="glyphicon glyphicon-star"></i>
@@ -138,7 +149,7 @@
               </h4>
             </div>
           </div>
-          <p class="clear"><b>Bio:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat diam neque, et semper felis cursus sit amet. Cras cursus risus eget diam consequat, a cursus dolor congue. Sed a interdum velit, non cursus felis. Curabitur ac dignissim arcu. Suspendisse in nibh non neque varius auctor. Aliquam erat volutpat. Sed aliquet hendrerit elit, id ornare lorem ornare sit amet.</p>
+          <p class="clear"><b>Bio:</b> Swat at dog run in circles but nap all day so lick butt swat at dog. Stare at ceiling. Chew foot chew iPad power cord and use lap as chair and rub face on everything chew foot. Hide when guests come over chew iPad power cord and stare at ceiling so behind the couch for roll around and lick butt under the bed. Find something else more interesting intently sniff hand stand in front of the computer screen, hunt anything that moves inspect anything brought into the house or hunt anything that moves, but roll around. Stretch nap all day under the bed. Run in circles burrow under covers claw drapes but run in circles stick butt in face under the bed. Missing until dinner time destroy couch for make muffins and chew foot for use lap as chair or make muffins and flop over. Destroy couch run in circles, or hopped up on goofballs intrigued by the shower.</p>
           <p class="clear"><b>Subjects:</b>
             <span class="label label-success">Programming</span>
             <span class="label label-success">Math</span>
@@ -151,14 +162,7 @@
           <button type="button" class="btn btn-default margin-top-10">Directions</button>
         </div>
       </div>
-    </div>
-
-    <!--{% block content %}{% endblock %}-->
-
-    <div class="footer">
-      <p class="center">&copy; College Cat Corp.</p>
-      <p class="center"><img src="/static/img/poweredby.png"></p>
-    </div>
-  </body>
+  </script>
+  <script src="/static/js/cat.js"></script>
   <script src="/static/js/search.js"></script>
 </html>
