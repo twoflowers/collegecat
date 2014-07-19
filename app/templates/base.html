@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="/static/img/favicon.ico">
+    <link rel="icon" href="/static/img/cat.png">
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -61,14 +61,20 @@
           .white {
             color: white;
           }
+          .clear {
+            clear: both;
+          }
 
+          .margin-top-10 {
+            margin-top: 10px;
+          }
     </style>
   </head>
   <body>
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container-narrow">
       <div class="navbar-header">
-        <div class="navbar-left"><a class="navbar-brand" href="#">College&nbsp;Cat</a></div>
+        <div class="navbar-left"><a class="navbar-brand" href="/"><img src="/static/img/cat.png" style="margin-top: -7px;"> College&nbsp;Cat</a></div>
         <div class="navbar-left">
           <form class="form-inline navbar-form" role="form">
             <div class="form-group">
@@ -112,19 +118,47 @@
       <p class="lead white center">Tuna flavored treats!</p>
     </div>
 
-      <hr>
-      <div class="row-fluid">
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat diam neque, et semper felis cursus sit amet. Cras cursus risus eget diam consequat, a cursus dolor congue. Sed a interdum velit, non cursus felis. Curabitur ac dignissim arcu. Suspendisse in nibh non neque varius auctor. Aliquam erat volutpat. Sed aliquet hendrerit elit, id ornare lorem ornare sit amet. Etiam egestas ullamcorper malesuada. Maecenas quis purus ut mi consequat tristique condimentum in sem. Vivamus ultricies et dolor eu tincidunt. Fusce feugiat dui quis rhoncus convallis. Cras pharetra odio sit amet ligula suscipit, ut euismod nibh dictum. Nulla sapien magna, venenatis sed leo sit amet, laoreet suscipit tellus. Proin sit amet sem mauris. Ut nec nunc feugiat, vehicula orci at, auctor diam. Nunc eu dui eros.
+    <div class="container-narrow">
+      <div class="row well" style="vertical-align: middle">
+        <div class="col-lg-2 pull-left center vcenter">
+          <img src="/static/img/profile-placeholder.png">
+          <button class="btn btn-warning margin-top-10">Contact</button>
+        </div>
+        <div class="col-lg-7">
+          <div class="container-fluid">
+            <div class="row">
+              <h4 class="">John Q. Public </h4>
 
-<!--{% block content %}{% endblock %}-->
+              <h4 class="">
+                <i class="glyphicon glyphicon-star"></i>
+                <i class="glyphicon glyphicon-star"></i>
+                <i class="glyphicon glyphicon-star"></i>
+                <i class="glyphicon glyphicon-star"></i>
+                <i class="glyphicon glyphicon-star-empty"></i>
+              </h4>
+            </div>
+          </div>
+          <p class="clear"><b>Bio:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat diam neque, et semper felis cursus sit amet. Cras cursus risus eget diam consequat, a cursus dolor congue. Sed a interdum velit, non cursus felis. Curabitur ac dignissim arcu. Suspendisse in nibh non neque varius auctor. Aliquam erat volutpat. Sed aliquet hendrerit elit, id ornare lorem ornare sit amet.</p>
+          <p class="clear"><b>Subjects:</b>
+            <span class="label label-success">Programming</span>
+            <span class="label label-success">Math</span>
+            <span class="label label-success">Goats</span>
+          </p>
+          <p class="clear"><b>Availability:</b> Anytime</p>
+        </div>
+        <div class="col-lg-3 center pull-right">
+          <img src="http://placehold.it/200x200" class="margin-top-10">
+          <button type="button" class="btn btn-default margin-top-10">Directions</button>
+        </div>
       </div>
+    </div>
 
-      <div class="footer">
-        <p class="center">&copy; College Cat Corp.</p>
-        <p class="center"><img src="/static/img/poweredby.png"></p>
-      </div>
+    <!--{% block content %}{% endblock %}-->
 
-    </div> <!-- /container -->
+    <div class="footer">
+      <p class="center">&copy; College Cat Corp.</p>
+      <p class="center"><img src="/static/img/poweredby.png"></p>
+    </div>
   </body>
   <script src="/static/js/search.js"></script>
 </html>
