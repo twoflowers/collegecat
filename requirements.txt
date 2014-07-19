@@ -1,2 +1,6 @@
 Flask
 Flask-WTF
+flask-restful
+requests
+SQLAlchemy
+flask-SQLAlchemy
