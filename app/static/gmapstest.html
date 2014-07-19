@@ -55,6 +55,24 @@
 </head>
 <body>
 BLARG
+<div id="myGPS"></div>
+<br>
 <div id="map-canvas" style="height: 400px; width: 600px;"/>
+<script type="text/javascript">
+    var x = document.getElementById("myGPS");
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+    function showPosition(position) {
+        x.innerHTML = "Latitude: " + position.coords.latitude +
+                "<br>Longitude: " + position.coords.longitude;
+        console.log("Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude);
+    }
+    window.onload = function () { getLocation() };
+</script>
 </body>
 </html>
