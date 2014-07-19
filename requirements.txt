@@ -4,3 +4,5 @@ flask-restful
 requests
 SQLAlchemy
 flask-SQLAlchemy
+https://github.com/OP3Nvoice/op3nvoice_python_2/archive/master.tar.gz
+uwsgi
