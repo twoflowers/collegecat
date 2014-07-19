@@ -25,11 +25,16 @@
             -moz-background-size: cover;
             -o-background-size: cover;
             background-size: cover;
+            font-family: "Helvetica Neue" !important;
           }
 
           .navbar {
             opacity: 0.9;
             /*background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0, rgba(248, 248, 248, 0.8) 100%) !important;*/
+          }
+
+          .navbar-header {
+            width: 98%;
           }
 
           /* Custom container */
@@ -65,7 +70,7 @@
       <div class="navbar-header">
         <div class="navbar-left"><a class="navbar-brand" href="#">College&nbsp;Cat</a></div>
         <div class="navbar-left">
-          <form class="form-inline navbar-form" role="form" action="/search" method="post">
+          <form class="form-inline navbar-form" role="form">
             <div class="form-group">
               <!-- search box -->
               <input id="search" name="search" type="text" class="form-control pull-left visible" placeholder="subject, e.g. math, spanish, etc...">
@@ -76,21 +81,21 @@
             </div>
             <!-- radius button -->
             <div class="btn-group">
-              <button type="button" class="btn btn-default dropdown-toggle visible" data-toggle="dropdown">
+              <button type="button" id="radius_dropdown" class="btn btn-default dropdown-toggle visible" data-toggle="dropdown">
                 Within 5 miles <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Within 5 miles</a></li>
-                <li><a href="#">Within 10 miles</a></li>
-                <li><a href="#">Within 25 miles</a></li>
+                <li><a id="radius_5"  href="#">Within 5 miles</a></li>
+                <li><a id="radius_10" href="#">Within 10 miles</a></li>
+                <li><a id="radius_25" href="#">Within 25 miles</a></li>
                 <li class="divider"></li>
-                <li><a href="#">Unlimited</a></li>
+                <li><a id="radius_0" href="#">Unlimited</a></li>
               </ul>
               <input type="hidden" name="radius" id="radius" value="5">
             </div>
             <!-- search button -->
             <div class="btn-group">
-              <button type="submit" class="btn btn-warning">Search</button>
+              <button type="button" id="search_button" class="btn btn-warning">Search</button>
             </div>
           </form>
         </div>
@@ -111,15 +116,6 @@
       <div class="row-fluid">
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat diam neque, et semper felis cursus sit amet. Cras cursus risus eget diam consequat, a cursus dolor congue. Sed a interdum velit, non cursus felis. Curabitur ac dignissim arcu. Suspendisse in nibh non neque varius auctor. Aliquam erat volutpat. Sed aliquet hendrerit elit, id ornare lorem ornare sit amet. Etiam egestas ullamcorper malesuada. Maecenas quis purus ut mi consequat tristique condimentum in sem. Vivamus ultricies et dolor eu tincidunt. Fusce feugiat dui quis rhoncus convallis. Cras pharetra odio sit amet ligula suscipit, ut euismod nibh dictum. Nulla sapien magna, venenatis sed leo sit amet, laoreet suscipit tellus. Proin sit amet sem mauris. Ut nec nunc feugiat, vehicula orci at, auctor diam. Nunc eu dui eros.
 
-Duis nec eleifend diam, in ultrices nibh. Sed laoreet nulla non tortor commodo imperdiet. Curabitur vitae nisi nec velit suscipit adipiscing in molestie nisl. Integer sem mi, posuere ut erat in, molestie sollicitudin risus. Nulla pharetra sit amet metus at placerat. Cras nec elit sit amet arcu facilisis lobortis ac eget elit. In hac habitasse platea dictumst. Sed enim sapien, ornare eu velit vel, interdum blandit quam.
-
-Aenean magna erat, congue ac metus quis, suscipit auctor orci. Duis nec erat iaculis, ultrices leo nec, sodales massa. Phasellus vitae quam scelerisque, sodales lacus quis, dictum lacus. Ut nunc ipsum, dictum eu lorem ut, auctor tristique dolor. Vestibulum semper consectetur hendrerit. Morbi vitae sodales libero. Duis pretium sodales tellus, eget sodales elit semper et. Nunc varius eget ipsum in luctus. In hac habitasse platea dictumst. Pellentesque ac elit commodo, euismod nisi quis, imperdiet eros. Nunc tempor pulvinar fringilla. Fusce vel arcu nec velit cursus fermentum.
-
-Ut est elit, blandit nec blandit at, molestie quis ligula. Nullam molestie lobortis leo non congue. Morbi pretium vehicula enim, et tempus orci tempus eget. Sed suscipit erat ac orci congue sodales. Proin mollis volutpat urna. Nullam nec justo neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras vulputate metus sed ante vulputate eleifend.
-
-Aliquam in rutrum lorem. Aenean a enim tristique, egestas orci nec, congue nunc. Vestibulum quam risus, luctus ullamcorper varius non, tincidunt ac massa. Integer euismod rutrum augue, et ornare risus convallis ac. Integer feugiat felis non nulla mollis, id interdum arcu dapibus. Nunc id consequat eros. Aliquam non lacinia neque.
-
-
 <!--{% block content %}{% endblock %}-->
       </div>
 
@@ -130,4 +126,5 @@ Aliquam in rutrum lorem. Aenean a enim tristique, egestas orci nec, congue nunc.
 
     </div> <!-- /container -->
   </body>
+  <script src="/static/js/search.js"></script>
 </html>
