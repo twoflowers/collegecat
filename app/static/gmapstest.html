@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <style type="text/css">
+        html {
+            height: 100%
+        }
+
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0
+        }
+
+        #map-canvas {
+            height: 100%
+        }
+    </style>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBw5N_6bBRyOev1rfNlCm7IpAthbv2AWRw">
+    </script>
+    <script type="text/javascript">
+        function initialize() {
+            var jccc = new google.maps.LatLng(38.9237738, -94.7306424);
+            var mapOptions = {
+                center: jccc,
+                zoom: 8
+            };
+            var map = new google.maps.Map(document.getElementById("map-canvas"),
+                    mapOptions);
+            var contentString = '<div id="content">' +
+                    '<h1><img src="http://www.gravatar.com/avatar/23dcc900b567396b0695e9761a73470e&s=40" />Justyn Shull</h1>' +
+                    '<p>Hodor, hodor. Hodor. Hodor, hodor - hodor, hodor. Hodor hodor, hodor, hodor hodor. Hodor. Hodor hodor hodor hodor hodor HODOR hodor, hodor hodor, hodor, hodor hodor. ' +
+                    '<br>Hodor hodor HODOR! Hodor hodor hodor hodor... Hodor hodor hodor. Hodor. Hodor, hodor... ' +
+                    '<br>Hodor hodor hodor hodor hodor! Hodor, hodor. Hodor. Hodor, hodor, hodor. Hodor hodor, hodor. Hodor hodor. Hodor, hodor. Hodor. ' +
+                    '<br>Hodor, HODOR hodor, hodor hodor, hodor. Hodor hodor hodor - hodor?! Hodor hodor - hodor hodor hodor; hodor hodor hodor!</p>' +
+                    '</div>';
+
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+            var marker = new google.maps.Marker({
+                position: jccc,
+                map: map,
+                title: "Justyn Shull!"
+            });
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+            });
+
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+</head>
+<body>
+BLARG
+<div id="map-canvas" style="height: 400px; width: 600px;"/>
+</body>
+</html>
