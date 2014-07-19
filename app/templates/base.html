@@ -1,24 +1,33 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    {% if title %}
-    <title>{{title}} - One Hour Cloud</title>
-    {% else %}
-    <title>One Hour Cloud</title>
-    {% endif %}
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <title>College Cat</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/static/img/favicon.ico">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <style type="text/css">
           body {
-            padding-top: 20px;
+            padding-top: 0px;
             padding-bottom: 40px;
           }
 
           /* Custom container */
           .container-narrow {
             margin: 0 auto;
-            max-width: 700px;
+            max-width: 1000px;
           }
+
           .container-narrow > hr {
             margin: 30px 0;
           }
@@ -37,44 +46,82 @@
             padding: 14px 24px;
           }
 
-          /* Supporting marketing content */
-          .marketing {
-            margin: 60px 0;
+          .center {
+            text-align: center;
           }
-          .marketing p + h4 {
-            margin-top: 28px;
-          }
-        </style>
 
-
+    </style>
   </head>
   <body>
-    <div class="container-narrow">
-
-      <div class="masthead">
-        <h3 class="muted">The One Hour Cloud</h3>
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container-narrow">
+      <div class="navbar-header">
+        <div class="navbar-left"><a class="navbar-brand" href="#">College&nbsp;Cat</a></div>
+        <div class="navbar-left">
+          <form class="form-inline navbar-form" role="form">
+            <div class="form-group">
+              <!-- search box -->
+              <input id="search" name="search" type="text" class="form-control pull-left" placeholder="subject, e.g. math, spanish, etc...">
+            </div>
+            <div class="form-group">
+              <!-- location box -->
+              <input id="location" name="location" type="text" class="form-control pull-left" placeholder="location, e.g. Kansas City">
+            </div>
+            <!-- radius button -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                Within 5 miles <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Within 5 miles</a></li>
+                <li><a href="#">Within 10 miles</a></li>
+                <li><a href="#">Within 25 miles</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Unlimited</a></li>
+              </ul>
+            </div>
+            <!-- search button -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-warning">Search</button>
+            </div>
+          </form>
+        </div>
+        <div class="navbar-right navbar-form">
+          <a href="#" class="btn btn-warning">Register</a>
+          <a href="#" class="btn btn-warning">Login</a>
+        </div>
       </div>
+      </div>
+    </div><!-- end of navbar -->
+
+    <div class="jumbotron">
+      <h1>Sign up right MEOW!</h1>
+      <p class="lead">Tuna flavored treats!</p>
+    </div>
 
       <hr>
-
-
-    <hr>
-      <div class="jumbotron">
-        <h1>Use a VM for just One Hour</h1>
-        <p class="lead">Why keep a vm around longer than you need too?  Spin a vm up, do a demo, then you are done.  We will clean up the mess afterwards.</p>
-      </div>
-
-      <hr>
-      <div class="row-fluid marketing" style="width:900px; margin:20px 0 0 -90px">
+      <div class="row-fluid">
         <div class="span12">
-{% block content %}{% endblock %}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat diam neque, et semper felis cursus sit amet. Cras cursus risus eget diam consequat, a cursus dolor congue. Sed a interdum velit, non cursus felis. Curabitur ac dignissim arcu. Suspendisse in nibh non neque varius auctor. Aliquam erat volutpat. Sed aliquet hendrerit elit, id ornare lorem ornare sit amet. Etiam egestas ullamcorper malesuada. Maecenas quis purus ut mi consequat tristique condimentum in sem. Vivamus ultricies et dolor eu tincidunt. Fusce feugiat dui quis rhoncus convallis. Cras pharetra odio sit amet ligula suscipit, ut euismod nibh dictum. Nulla sapien magna, venenatis sed leo sit amet, laoreet suscipit tellus. Proin sit amet sem mauris. Ut nec nunc feugiat, vehicula orci at, auctor diam. Nunc eu dui eros.
+
+Duis nec eleifend diam, in ultrices nibh. Sed laoreet nulla non tortor commodo imperdiet. Curabitur vitae nisi nec velit suscipit adipiscing in molestie nisl. Integer sem mi, posuere ut erat in, molestie sollicitudin risus. Nulla pharetra sit amet metus at placerat. Cras nec elit sit amet arcu facilisis lobortis ac eget elit. In hac habitasse platea dictumst. Sed enim sapien, ornare eu velit vel, interdum blandit quam.
+
+Aenean magna erat, congue ac metus quis, suscipit auctor orci. Duis nec erat iaculis, ultrices leo nec, sodales massa. Phasellus vitae quam scelerisque, sodales lacus quis, dictum lacus. Ut nunc ipsum, dictum eu lorem ut, auctor tristique dolor. Vestibulum semper consectetur hendrerit. Morbi vitae sodales libero. Duis pretium sodales tellus, eget sodales elit semper et. Nunc varius eget ipsum in luctus. In hac habitasse platea dictumst. Pellentesque ac elit commodo, euismod nisi quis, imperdiet eros. Nunc tempor pulvinar fringilla. Fusce vel arcu nec velit cursus fermentum.
+
+Ut est elit, blandit nec blandit at, molestie quis ligula. Nullam molestie lobortis leo non congue. Morbi pretium vehicula enim, et tempus orci tempus eget. Sed suscipit erat ac orci congue sodales. Proin mollis volutpat urna. Nullam nec justo neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras vulputate metus sed ante vulputate eleifend.
+
+Aliquam in rutrum lorem. Aenean a enim tristique, egestas orci nec, congue nunc. Vestibulum quam risus, luctus ullamcorper varius non, tincidunt ac massa. Integer euismod rutrum augue, et ornare risus convallis ac. Integer feugiat felis non nulla mollis, id interdum arcu dapibus. Nunc id consequat eros. Aliquam non lacinia neque.
+
+
+<!--{% block content %}{% endblock %}-->
         </div>
       </div>
 
       <hr>
 
       <div class="footer">
-        <p>&copy; twovi.com and Codero Hosting</p>
+        <p class="center">&copy; College Cat Corp.</p>
+        <p class="center"><img src="/static/img/poweredby.png"></p>
       </div>
 
     </div> <!-- /container -->
