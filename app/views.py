@@ -18,6 +18,5 @@ def index():
 
 def restify(data, status=200):
     status = int(status)
-    return {'data':data,'status':status}, status
-
-
+    return {'data': data,
+            'status': status}, status
