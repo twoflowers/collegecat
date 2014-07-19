@@ -1,31 +1,61 @@
 import requests, json
+import simplify
 from app import app
 
-class codero_api():
+class simplify():
     def __init__(self):
-        self.api_key = app.config['CODERO_API_KEY']
-        self.url = app.config['CODERO_API_URL']
 
-    def api_request(self, command, request_type = 'GET', data=''):
-        if request_type == 'POST':
+        simplify.public_key = app.config['simplify_public_key']
+        simplify.private_key = app.config['simplify_private_key']
 
-            return requests.post("%s%s" % (self.url, command),data=json.dumps(data),headers={'Authorization':'%s' % self.api_key, 'Content-Type':'application/json'})
-        elif request_type == 'DELETE':
-            return requests.delete("%s%s/%s" % (self.url, command, data), headers={'Authorization': '%s' % self.api_key})
-        else:
-            return requests.get("%s%s" % (self.url, command), headers={'Authorization': '%s' % self.api_key})
+    def make_payment(self, cc_number, cc_exp_month, cc_exp_year, cc_cvc, amount, description):
+        try:
+            payment = simplify.Payment.create({
+               "card" : {
+                    "number": "%s" % cc_number,
+                    "expMonth": cc_exp_month,
+                    "expYear": cc_exp_year,
+                    "cvc": "%s" % cc_cvc
+                },
+                "amount" : "%s" % amount,
+                "description" : "%s" % description,
+                "currency" : "USD"
+            })
+        except:
+            return payment.paymentStatus
 
 
-    def list_running(self):
-        return self.api_request('servers').json()
+        if payment.paymentStatus == 'APPROVED':
+            return True
 
-    def create_vm(self, hostname, email):
-        data = {
-            'name': hostname,
-            'codelet': app.config['CODERO_API_CODELET'],
-            'billing': app.config['CODERO_API_BILLING_TYPE']
-        }
-        self.api_request('servers', 'POST', data)
+    def create_user(self):
+        user = simplify.Customer.create({
+            "email" : "customer@mastercard.com",
+            "name" : "Customer Customer",
+            "card" : {
+               "expMonth" : "11",
+               "expYear" : "19",
+               "cvc" : "123",
+               "number" : "5555555555554444"
+            },
+            "reference" : "Ref1"})
 
-    def delete_vm(self, vm_id):
-        self.api_request('servers', 'DELETE', vm_id)
+        return user
+
+    def find_user(self, info):
+        user = simplify.Customer.find('%s') % info
+
+        return user
+
+    def delete_user(self, info):
+        user = self.find_user(info)
+
+        user.delete()
+
+    def update_user(self, key, value, info):
+        # @todo not needed for this hack
+        return True
+
+
+
+
