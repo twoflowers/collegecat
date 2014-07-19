@@ -18,11 +18,8 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <style type="text/css">
           body {
-            padding-top: 50px;
+            padding-top: 150px;
             padding-bottom: 40px;
-          }
-
-          html {
             background: url(/static/img/blurtunnel.jpg) no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
@@ -31,7 +28,8 @@
           }
 
           .navbar {
-            opacity: 0.8;
+            opacity: 0.9;
+            /*background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0, rgba(248, 248, 248, 0.8) 100%) !important;*/
           }
 
           /* Custom container */
@@ -44,22 +42,19 @@
             margin: 30px 0;
           }
 
-          /* Main marketing message and sign up button */
-          .jumbotron {
-            margin: 60px 0;
-            text-align: center;
-          }
-          .jumbotron h1 {
-            font-size: 72px;
-            line-height: 1;
-          }
-          .jumbotron .btn {
-            font-size: 21px;
-            padding: 14px 24px;
+          .footer {
+            opacity: 0.5;
           }
 
           .center {
             text-align: center;
+          }
+
+          .visible {
+            opacity: 1.0 !important;
+          }
+          .white {
+            color: white;
           }
 
     </style>
@@ -70,18 +65,18 @@
       <div class="navbar-header">
         <div class="navbar-left"><a class="navbar-brand" href="#">College&nbsp;Cat</a></div>
         <div class="navbar-left">
-          <form class="form-inline navbar-form" role="form">
+          <form class="form-inline navbar-form" role="form" action="/search" method="post">
             <div class="form-group">
               <!-- search box -->
-              <input id="search" name="search" type="text" class="form-control pull-left" placeholder="subject, e.g. math, spanish, etc...">
+              <input id="search" name="search" type="text" class="form-control pull-left visible" placeholder="subject, e.g. math, spanish, etc...">
             </div>
             <div class="form-group">
               <!-- location box -->
-              <input id="location" name="location" type="text" class="form-control pull-left" placeholder="location, e.g. Kansas City">
+              <input id="location" name="location" type="text" class="form-control pull-left visible" placeholder="location, e.g. Kansas City">
             </div>
             <!-- radius button -->
             <div class="btn-group">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              <button type="button" class="btn btn-default dropdown-toggle visible" data-toggle="dropdown">
                 Within 5 miles <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu">
@@ -91,10 +86,11 @@
                 <li class="divider"></li>
                 <li><a href="#">Unlimited</a></li>
               </ul>
+              <input type="hidden" name="radius" id="radius" value="5">
             </div>
             <!-- search button -->
             <div class="btn-group">
-              <button type="button" class="btn btn-warning">Search</button>
+              <button type="submit" class="btn btn-warning">Search</button>
             </div>
           </form>
         </div>
@@ -107,13 +103,12 @@
     </div><!-- end of navbar -->
 
     <div class="container-narrow">
-      <h1>Sign up right MEOW!</h1>
-      <p class="lead">Tuna flavored treats!</p>
+      <h1 class="white center">Sign up right MEOW!</h1>
+      <p class="lead white center">Tuna flavored treats!</p>
     </div>
 
       <hr>
       <div class="row-fluid">
-        <div class="span12">
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut feugiat diam neque, et semper felis cursus sit amet. Cras cursus risus eget diam consequat, a cursus dolor congue. Sed a interdum velit, non cursus felis. Curabitur ac dignissim arcu. Suspendisse in nibh non neque varius auctor. Aliquam erat volutpat. Sed aliquet hendrerit elit, id ornare lorem ornare sit amet. Etiam egestas ullamcorper malesuada. Maecenas quis purus ut mi consequat tristique condimentum in sem. Vivamus ultricies et dolor eu tincidunt. Fusce feugiat dui quis rhoncus convallis. Cras pharetra odio sit amet ligula suscipit, ut euismod nibh dictum. Nulla sapien magna, venenatis sed leo sit amet, laoreet suscipit tellus. Proin sit amet sem mauris. Ut nec nunc feugiat, vehicula orci at, auctor diam. Nunc eu dui eros.
 
 Duis nec eleifend diam, in ultrices nibh. Sed laoreet nulla non tortor commodo imperdiet. Curabitur vitae nisi nec velit suscipit adipiscing in molestie nisl. Integer sem mi, posuere ut erat in, molestie sollicitudin risus. Nulla pharetra sit amet metus at placerat. Cras nec elit sit amet arcu facilisis lobortis ac eget elit. In hac habitasse platea dictumst. Sed enim sapien, ornare eu velit vel, interdum blandit quam.
@@ -126,10 +121,7 @@ Aliquam in rutrum lorem. Aenean a enim tristique, egestas orci nec, congue nunc.
 
 
 <!--{% block content %}{% endblock %}-->
-        </div>
       </div>
-
-      <hr>
 
       <div class="footer">
         <p class="center">&copy; College Cat Corp.</p>
