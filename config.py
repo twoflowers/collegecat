@@ -17,6 +17,10 @@ db_user = 'collegecat'
 db_pass = 'UrNotAG04t'
 db_name = 'collegecat'
 
+
+SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{psw}@{host}/{name}'.format(user=db_user, host=db_host,
+                                                                      psw=db_pass, name=db_name)
+
 college_cat_email = """
 Hello,
 
