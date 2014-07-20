@@ -94,4 +94,4 @@ $.get('/api/subjects', function(data) {
 },'json');
 
 // window.onload = function () { get_location() };
-window.onload = function () { set_location('Overland Park, KS'); set_search('test'); };
+window.onload = function () { set_location('Overland Park, KS'); set_search(''); };
