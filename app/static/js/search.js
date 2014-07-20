@@ -39,11 +39,16 @@ function populate_search_results() {
     }
     results_container = $('#search_results');
     var results_html = '';
+    var ids = [];
     for (var index in data) {
         console.log(data[index]);
         results_html += tmpl('results_template', data[index]);
+        ids.push(data[index]['id']);
     }
     results_container.html(results_html);
+    for (var index in ids) {
+        $('#subjects_' + ids[index]).select2({});
+    }
 }
 
 function get_location() {
@@ -68,4 +73,13 @@ function set_location(location) {
     $('#location').val(location);
 }
 
-window.onload = function () { get_location() };
+function set_search(search) {
+    $('#search').val(search);
+}
+
+String.prototype.capitalize = function() {
+    return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+};
+
+// window.onload = function () { get_location() };
+window.onload = function () { set_location('Overland Park, KS'); set_search('test'); };
