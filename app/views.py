@@ -45,11 +45,15 @@ def handle_invalid_usage(error):
 def restify(data, status=None):
 
     if isinstance(data, Exception):
-        status = int(status) or data.status_code or 500
+        try:
+            status = int(status or data.status_code or 500)
+        except:
+            status = 500
+
         data = {'exception': data.message}
 
     elif isinstance(data, (list, dict)):
-        status = int(status) or 200
+        status = int(status or 200)
 
     else:
         raise errors.SystemError("Restify")
