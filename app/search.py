@@ -87,13 +87,11 @@ class SearchTags(object):
             if max_price is not None:  # remove queries that don't fit in budget
                 max_price = float(max_price)
                 for tag in target_tags:
-                    prices = db.session.query(Price).filter_by(tag=tag.id).filter(Price.price <= max_price)
-
+                    prices = db.session.query(Price).filter_by(tag=tag.id).all()
+                    prices = [price.price for price in prices if price.price <= max_price]
                     if prices:
-                        print("Adding this to the list the price %r" % prices[0].price)
                         break
                 else:
-                    print "Nothing to add, boo hoo"
                     continue
 
             # Didn't get filtered out, so add them to the list
