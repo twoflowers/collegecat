@@ -117,6 +117,7 @@ subjects = [
     'Sociology',
     'Speech/Debate',
     'Theater',
+    'Underwater Basket Weaving',
     'Women and Gender Studies',
 ]
 
@@ -139,7 +140,8 @@ for row in csv_file:
         name="%s %s" % (row['GivenName'], row['Surname']),
         username=row['Username'].lower(),
         password=row['Password'],
-        email=row['EmailAddress']
+        email=row['EmailAddress'],
+        phone=row['TelephoneNumber']
     )
     newUser.loc.append(newLoc)
     db.session.add(newLoc)

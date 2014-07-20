@@ -45,7 +45,82 @@ class Ratings(restful.Resource):
 
 api.add_resource(Ratings, '/api/rating/<int:tutor_id>')
 
+class CreateAppointment(restful.Resource):
+    def post(self, tutor_id):
+        # TODO: Find logged-in user
+        user_id = 300
+        parser = reqparse.RequestParser()
+        parser.add_argument('message', type=str, help='Short message to send to tutor')
+        parser.add_argument('subjects', type=str, help='String of subjects')
+        args = parser.parse_args()
+        try:
+            tutor = User.query.get(tutor_id)
+            user = User.query.get(user_id)
+        except Exception as e:
+            return restify(e)
 
+        try:
+            newAppt = Appointment(user_id, tutor_id, args['message'])
+            db.session.add(newAppt)
+            db.session.commit()
+            sp = SendgridProcessor()
+            sp.send(to=tutor.email, student_name=user.name,
+                    tutor_subject=args['subjects'],
+                    student_email=user.email,
+                    student_phone=user.phone,
+                    user_message=args['message'])
+            return restify(data={"message": "Notification sent successfully!"})
+        except Exception as e:
+            db.session.rollback()
+            return restify(data={"exception": "%r" % e}, status=500)
+
+
+class DeleteAppointment(restful.Resource):
+    def get(self, appointment_id):
+        try:
+            appt = Appointment.query.get(appointment_id)
+            db.session.delete(appt)
+            db.session.commit()
+            return restify(data={"message": "Appointment ID %s deleted." % appointment_id})
+        except Exception as e:
+            db.session.rollback()
+            return restify(data={"exception": "%r" % e}, status=500)
+
+api.add_resource(DeleteAppointment, '/api/delete_appointment/<int:appointment_id>')
+api.add_resource(CreateAppointment, '/api/create_appointment/<int:tutor_id>')
+
+
+class Subjects(restful.Resource):
+    def get(self):
+        return [tag.serialize for tag in db.session.query(Tag).all()]
+
+api.add_resource(Subjects, '/api/subjects')
+
+class Login(restful.Resource):
+    def get(self, email):
+        parser = reqparse.RequestParser()
+        parser.add_argument('email', type=str, help='user email address')
+        args = parser.parse_args()
+
+        return User.query.filter_by(email=email).first().serialize
+
+api.add_resource(Login, '/api/login/<email>')
+
+
+class UserProfile(restful.Resource):
+    def get(self, user_id):
+        try:
+            user = User.query.get(user_id)
+            appointments = Appointment.query.filter_by(user=user_id)
+            return restify(data={
+                'user': user.serialize,
+                'appointments': [appt.serialize for appt in appointments]
+            })
+        except Exception as e:
+            return restify(data=e)
+
+
+api.add_resource(UserProfile, '/api/profile/<int:user_id>')
 
 @app.route('/')
 def index():

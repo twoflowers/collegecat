@@ -1,6 +1,7 @@
 # Built In
 import datetime
 import json
+import time
 
 # Module
 from app import app
@@ -9,6 +10,7 @@ from app import app
 from flask.ext.sqlalchemy import SQLAlchemy
 import requests
 import simplify
+import sendgrid
 
 db = SQLAlchemy(app)
 
@@ -117,17 +119,18 @@ class pipl(object):
         return req.json()
 
 
-def sendgrid(object):
+class SendgridProcessor(object):
     def __init__(self):
-        self.email = sendgrid.SendGridClient(app.config['sendgrid_username'], app.config['sendgrid_password'])
+        self.email = sendgrid.SendGridClient(app.config['SENDGRID_USERNAME'], app.config['SENDGRID_PASSWORD'])
 
-    def send(self, to, student_name, tutor_subject, student_email, student_phone):
-
+    def send(self, to, student_name, tutor_subject, student_email, student_phone, user_message):
         message = sendgrid.Mail()
         message.add_to(to)
-        message.set_subject('College.Cat Request for Tutor')
-        message.set_html(app.config['college_cat_email'] % (student_name, tutor_subject, student_name, student_email, student_phone ))
-        message.set_text(app.config['college_cat_email'] % (student_name, tutor_subject, student_name, student_email, student_phone ))
+        message.set_subject('College.Cat Appointment Request')
+        message.set_html(app.config['COLLEGE_CAT_EMAIL'] % (student_name, tutor_subject, student_name, student_email, student_phone,
+                                                            user_message ))
+        message.set_text(app.config['COLLEGE_CAT_EMAIL'] % (student_name, tutor_subject, student_name, student_email, student_phone,
+                                                            user_message ))
         message.set_from('CollegeCat Admin <admin@college.cat>')
 
         self.email.send(message)
@@ -165,12 +168,14 @@ class User(db.Model):
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     tutor = db.Column(db.Boolean, default=True)
     tags = db.relationship('Tag', secondary=TaggedUsers, backref='tag', lazy='dynamic')
+    phone = db.Column(db.String(20))
 
-    def __init__(self, username, password, email, name):
+    def __init__(self, username, password, email, name, phone):
         self.username = username
         self.password = password
         self.email = email
         self.name = name
+        self.phone = phone
 
 
     def __repr__(self):
@@ -182,7 +187,14 @@ class User(db.Model):
        """Return object data in easily serializeable format"""
        return {
            'id': self.id,
-           'username': self.username
+           'username': self.username,
+           'email': self.email,
+           'name': self.name,
+           'bio': self.bio,
+           'location': [loc.serialize for loc in self.loc],
+           'tags': [tag.serialize for tag in self.tags],
+           'phone': self.phone,
+
        }
 
 
@@ -205,6 +217,18 @@ class Location(db.Model):
     def __repr__(self):
         return '<Location {city}, {state} {zip} (gps:{gps})>'.format(city=self.city, state=self.city,
                                                                      zip=zip, gps=self.gps)
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'street': self.street,
+            'city': self.city,
+            'state': self.state,
+            'zip': self.zip,
+            'gps': self.gps
+        }
 
 
 class Tag(db.Model):
@@ -246,5 +270,30 @@ class Rating(db.Model):
             raise RuntimeError("Auto-rating prohibited")
 
     def __repr__(self):
-        return "<Rating {rating} : {comment}>".format(rating=self.rating,
-                                                      comment=self.comment if self.comment else "")
+        return "<Rating {rating} : {comment}>".format(rating= self.rating,
+                                                      comment= self.comment if self.comment else "")
+
+class Appointment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user = db.Column(db.Integer, db.ForeignKey(User.id))
+    tutor = db.Column(db.Integer, db.ForeignKey(User.id))
+    message = db.Column(db.String(1000))
+    created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    invoice = db.Column(db.String(255))
+
+    def __init__(self, user_id, tutor_id, message):
+        self.user = user_id
+        self.tutor = tutor_id
+        self.message = message
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        unix_time = time.mktime(self.created.timetuple())
+        return {
+            'id': self.id,
+            'tutor': User.query.get(self.tutor).serialize,
+            'message': self.message,
+            'created': unix_time,
+            'invoice': self.invoice
+        }
