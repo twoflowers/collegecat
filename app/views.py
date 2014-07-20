@@ -16,6 +16,7 @@ api.add_resource(HelloWorld, '/api/')
 def index():
     return render_template('base.html')
 
+
 def restify(data, status=200):
     status = int(status)
     return {'data': data,
