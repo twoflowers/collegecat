@@ -3,8 +3,8 @@ simplify_public_key = "sbpb_MWJlOWRjZGEtZWUyMC00NDAzLWI4MGYtMTQ3N2ZiOWE1ODY4"
 simplify_private_key = "poST9vBz/bxRCL5sye6xVpssOZFOLntt2ZUEEzPHig55YFFQL0ODSXAOkNtXTToq"
 simplify_reference = ""
 
-sendgrid_username = 'collegecat'
-sendgrid_password = '7HsCLiiL'
+SENDGRID_USERNAME = 'collegecat'
+SENDGRID_PASSWORD = '7HsCLiiL'
 
 SRF_ENABLED = True
 SECRET_KEY = 'you-will-never-guess'
@@ -18,14 +18,17 @@ db_name = 'collegecat'
 SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{psw}@{host}/{name}'.format(user=db_user, host=db_host,
                                                                       psw=db_pass, name=db_name)
 
-college_cat_email = """
+COLLEGE_CAT_EMAIL = """
 Hello,
-
-We are informing you that %s is looking for a tutor and has requested a meetup time with you in the subject of
-%s.
-
-Contact Information for %s :
-
-Email: %s
-Phone: %s
+<br>
+<p>We are informing you that %s is looking for a tutor and has requested a meetup with you in the subject of
+%s.</p>
+<br>
+<br>Contact Information for %s :
+<br>
+<br><strong>Email</strong>: %s
+<br><strong>Phone</strong>: %s
+<br>
+<br>The message they left is:
+<p>%s</p>
 """
