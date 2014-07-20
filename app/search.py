@@ -2,6 +2,8 @@ from math import sin, cos, radians, acos
 import requests, json
 from app import app
 
+from models import db, Price
+
 # http://en.wikipedia.org/wiki/Earth_radius
 """For Earth, the mean radius is 6,371.009 km (˜3,958.761 mi; ˜3,440.069 nmi)"""
 EARTH_RADIUS_IN_MILES = 3958.761
@@ -48,7 +50,7 @@ class SearchTags():
         else:
             return None
 
-    def search(self, user, search_term=None, radius=30):
+    def search(self, user, search_term=None, radius=30, max_price=None):
         """
         filter_by using subject
         loop through results
@@ -59,6 +61,7 @@ class SearchTags():
         :param search_term:
         :param user:
         :param radius:
+        :param max_price:
         :return:
         """
         potential_tutors = []
@@ -70,9 +73,17 @@ class SearchTags():
             if not distance:
                 continue
 
-            if not search_term in tutor.subjects:
+            target_tags = [tag for tag in tutor.tags if search_term in tag]
+            if not target_tags:
                 continue
 
+            if max_price:
+                for tag in target_tags:
+                    prices = db.session.query(Price).filter((Price.tag == tag) & (Price.price <= max_price))
+                    if prices:
+                        break
+                else:
+                    continue
 
             # Didn't get filtered out, so add them to the list
             filtered_tutors.append(tutor)
