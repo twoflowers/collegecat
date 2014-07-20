@@ -175,6 +175,7 @@ for row in csv_file:
     tags = random.sample(subjects, random.randint(0, 6))
     if newUser.username == 'santov':
         tags.append('Bulgarian')
+        tags.append('Goat Herding')
     elif newUser.username == 'marcs':
         tags.append('Spanish')
         tags.append('Chupacabras')
