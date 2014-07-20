@@ -158,7 +158,7 @@ class Location(db.Model):
 class Tag(db.Model):
     __tablename__ = 'Tag'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
+    name = db.Column(db.String(100), unique=True)
     users = db.relationship('User', secondary=TaggedUsers, backref='user', lazy='dynamic')
 
     def __init__(self, name):
