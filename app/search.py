@@ -50,7 +50,7 @@ class SearchTags(object):
             tutor_gps = tutor_loc.gps.split(',')
             tutor_gps = {'lat': tutor_gps[0], 'lon': tutor_gps[1]}
             distance = calc_dist_fixed(user_gps['lat'], user_gps['lon'], tutor_gps['lat'], tutor_gps['lon'])
-            if distance <= radius:
+            if distance <= radius or radius == 0:
                 return distance
             else:
                 return None
@@ -75,7 +75,7 @@ class SearchTags(object):
         for tutor in potential_tutors:
             distance = self.filter_by_radius(user_gps=user_gps, tutor=tutor, radius=radius)
             if not distance:
-                continue
+                distance = 5
 
             tags = tutor.tags.all()
 
