@@ -278,6 +278,7 @@ class Appointment(db.Model):
     message = db.Column(db.String(1000))
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     invoice = db.Column(db.String(255))
+    amount = db.Column(db.Integer, nullable=True)
 
     def __init__(self, user_id, tutor_id, message):
         self.user = user_id
@@ -290,6 +291,7 @@ class Appointment(db.Model):
         unix_time = time.mktime(self.created.timetuple())
         return {
             'id': self.id,
+            'amount': self.amount,
             'tutor': User.query.get(self.tutor).serialize,
             'message': self.message,
             'created': unix_time,
