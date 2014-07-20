@@ -156,7 +156,7 @@
           <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#login_modal">Login</a>
         </div>
         <div class="navbar-right navbar-form" id="profile_buttons" style="display:none;">
-          <a href="#" class="btn btn-default">Profile</a>
+          <a href="#" class="btn btn-default" id="profile_button">Profile</a>
           <a href="#" class="btn btn-warning" id="logout_button">Logout</a>
         </div>
       </div>
@@ -173,10 +173,10 @@
             </div>
             <div class="modal-body">
               <h4>Username:
-                <input id="email" name="email" type="text" class="form-control visible margin-top-10" placeholder="someone@example.com">
+                <input id="email" name="email" type="text" class="form-control visible margin-top-10" placeholder="someone@example.com" value="justyns@codero.com">
               </h4>
               <h4>Password:
-                <input id="password" name="password" type="password" class="form-control visible margin-top-10" placeholder="password">
+                <input id="password" name="password" type="password" class="form-control visible margin-top-10" placeholder="password" value="test">
               </h4>            </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -205,6 +205,24 @@ Intently stare at the same spot hunt anything that moves swat at dog. Behind the
 Intrigued by the shower inspect anything brought into the house yet why must they do that and play time stand in front of the computer screen so chase mice and stare at ceiling. Under the bed. Intrigued by the shower missing until dinner time but stare at ceiling claw drapes so flop over shake treat bag yet flop over. Hate dog chew iPad power cord hopped up on goofballs. Find something else more interesting. Run in circles lick butt, but intently stare at the same spot.
     </div>
 
+    <div class="container-narrow well" id="profile_user" style="display:none">
+    </div>
+    <script type="text/html" id="profile_user_template">
+      <h4>Name: <%=name%></h4>
+      <p class="clear"><b>Bio:</b> <%=bio%></p>
+      <p class="clear"><b>Email: </b> <%=email%></p>
+      <p class="clear"><b>Phone: </b> <%=phone%></p>
+      <p class="clear"><b>Subjects:</b>
+        <% for (var i = 0; i < tags.length; i++ ) { %>
+          <span style="margin-right: 4px;">
+          <span class="label label-primary subject"><%=tags[i]['name']%>
+            <span class="label label-warning price">$<%=tags[i]['price']['price']/100%>/hour</span>
+          </span>
+          </span>
+        <% } %>
+        <span class="label label-success subject" style="padding-right: 4px;">Add a subject...</span>
+      </p>
+    </script>
 
     <div class="container-narrow" id="search_results">
     </div>
