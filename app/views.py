@@ -145,14 +145,14 @@ class UserProfile(restful.Resource):
 api.add_resource(UserProfile, '/api/profile/<int:user_id>')
 
 class CreateInvoice(restful.Resource):
-    def get(self, appointment_id, amount):
+    def get(self, appointment_id, session_amount):
         parser = reqparse.RequestParser()
         parser.add_argument('appointment_id', type=str, help='user appointment id')
-        parser.add_argument('amount', type=str, help='invoice ammount')
+        parser.add_argument('session_amount', type=str, help='invoice ammount')
 
         appointments = Appointment.query.filter_by(id=appointment_id)
         appointments = [appt.serialize for appt in appointments]
-        print appointments
+
         student_id = appointments[0]['student']['id']
 
 
@@ -163,9 +163,17 @@ class CreateInvoice(restful.Resource):
 
         invoice = SimplifyProcessor()
 
-        return invoice.create_invoice(payment_id, amount)
+        ret = invoice.create_invoice(payment_id, session_amount)
 
-api.add_resource(CreateInvoice, '/api/create_invoice/<int:appointment_id>/<int:amount>')
+        app = Appointment.query.get(appointment_id)
+        app.amount = session_amount
+        app.invoice = ret['id']
+        db.session.commit()
+
+
+        return ret
+
+api.add_resource(CreateInvoice, '/api/create_invoice/<int:appointment_id>/<int:session_amount>')
 
 
 @app.route('/')
