@@ -12,7 +12,7 @@ $('#login_button').on('click', function () {
     var login_button = $(this);
     login_button.button('loading');
     $.ajax({
-        url: "/api/login/" + $('#email').val(),
+        url: "/api/login?username=" + $('#email').val() + "&password=" + $('#password').val()
     })
     .done(function(data) {
         login(data, login_button);
@@ -24,7 +24,7 @@ $('#login_button').on('click', function () {
 
 function login(data, login_button) {
     $.ajax({
-        url: "/api/profile/" + data['id'],
+        url: "/api/profile/" + data['user_id'],
     })
     .done(function(data) {
         profile = data['data'];
