@@ -46,6 +46,11 @@ class Ratings(restful.Resource):
 api.add_resource(Ratings, '/api/rating/<int:tutor_id>')
 
 
+class Subjects(restful.Resource):
+    def get(self):
+        return [tag.serialize for tag in db.session.query(Tag).all()]
+
+api.add_resource(Subjects, '/api/subjects')
 
 @app.route('/')
 def index():
