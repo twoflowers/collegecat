@@ -156,6 +156,23 @@ class Subjects(restful.Resource):
     def get(self):
         return [tag.serialize for tag in db.session.query(Tag).all()]
 
+    @login_required
+    def post(self):
+        args = request.get_json(force=True)
+        subject = args.get("subject") or args.get('tag') or args.get("name")
+        if subject:
+            try:
+                new_tag = Tag(name=subject)
+                db.session.add(new_tag)
+                db.session.commit()
+            except Exception as e:
+                print "Couldn't add tag because %r" % e
+                db.session.rollback()
+                raise errors.SystemError("Unable to add subject, sorry!")
+        else:
+            raise errors.InvalidUsage("Please provide a subject")
+
+
 api.add_resource(Subjects, '/api/subjects')
 
 class Login(restful.Resource):
