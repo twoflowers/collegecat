@@ -319,21 +319,21 @@ Rate your tutors, help others get the best tutors they can with your reviews.  T
           </div>
           <p class="clear"><b>Bio:</b> <%=bio%></p>
           <p class="clear"><b>Subjects:</b>
-            <% for (var i = 0; i < subjects.length; i++ ) { %>
+            <% for (var i = 0; i < tags.length; i++ ) { %>
               <span style="margin-right: 4px;">
-              <span class="label label-primary subject"><%=subjects[i]%>
-                <span class="label label-warning price">$<%=price[i]%>/hour</span>
+              <span class="label label-primary subject"><%=tags[i].name%>
+                <span class="label label-warning price">$<%=tags[i].price.price/100%>/hour</span>
               </span>
               </span>
             <% } %>
             <span>&nbsp;</span>
           </p>
-          <p class="clear"><b>Availability:</b> <%=availability%></p>
+          <p class="clear"><b>Availability:</b> Anytime</p>
         </div>
         <div class="col-lg-3 center pull-right">
-          <img width="200px" height="200px" class="map-image" src="http://maps.googleapis.com/maps/api/staticmap?center=<%=latitude%>,<%=longitude%>&zoom=13&size=200x200&scale=2maptype=roadmap
+          <img width="200px" height="200px" class="map-image" src="http://maps.googleapis.com/maps/api/staticmap?center=<%=location[0].lat%>,<%=location[0].lon%>&zoom=13&size=200x200&scale=2maptype=roadmap
 &markers=color:blue%7Clabel:S%7CPH&key=AIzaSyBw5N_6bBRyOev1rfNlCm7IpAthbv2AWRw">
-          <a href="https://www.google.com/maps/@<%=latitude%>,<%=longitude%>,13z" class="btn btn-default margin-top-10" target="_blank">Enlarge Map</a>
+          <a href="https://www.google.com/maps/@<%=location[0].lat%>,<%=location[0].lon%>,13z" class="btn btn-default margin-top-10" target="_blank">Enlarge Map</a>
         </div>
       </div>
 
@@ -348,8 +348,8 @@ Rate your tutors, help others get the best tutors they can with your reviews.  T
             <div class="modal-body center">
               <h4>Subject:
               <select id="subjects_<%=id%>" multiple>
-                <% for (var i = 0; i < subjects.length; i++ ) { %>
-                  <option value="<%=subjects[i]%>" selected><%=subjects[i].capitalize()%></option>
+                <% for (var i = 0; i < tags.length; i++ ) { %>
+                  <option value="<%=tags[i].name%>" selected><%=tags[i].name.capitalize()%></option>
                 <% } %>
               </select>
               </h4>
