@@ -103,7 +103,15 @@ def sendgrid(object):
         self.email.send(message)
 
 
+TaggedUsers = db.Table('TaggedUsers',
+                       db.Column("id", db.Integer, primary_key=True),
+                       db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                       db.Column('tag_id', db.Integer, db.ForeignKey('Tag.id')),
+                       db.Column('created', db.TIMESTAMP, default=datetime.datetime.utcnow))
+
+
 class User(db.Model):
+    __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
@@ -113,12 +121,15 @@ class User(db.Model):
     bio = db.Column(db.String(1000), nullable=True)
     loc = db.relationship("Location", backref="user")
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    tutor = db.Column(db.Boolean, default=True)
+    tags = db.relationship('Tag', secondary=TaggedUsers, backref='tag', lazy='dynamic')
 
     def __init__(self, username, password, email, name):
         self.username = username
         self.password = password
         self.email = email
         self.name = name
+
 
     def __repr__(self):
         return '<User {name}({username})email:{email}>'.format(name=self.name, email=self.email, username=self.username)
@@ -144,29 +155,11 @@ class Location(db.Model):
         return '<Location {city}, {state} {zip} (gps:{gps})>'.format(city=self.city, state=self.city,
                                                                      zip=zip, gps=self.gps)
 
-# class Department(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(100), unique=True)
-#
-#     def __init__(self, name):
-#         self.name = name
-#
-#     def __repr__(self):
-#         return '<Department %r>' % self.name
-
-
-TaggedTutors = db.Table('TaggedTutors',
-                        db.Column("id", db.Integer, primary_key=True),
-                        db.Column('tutor_id', db.Integer, db.ForeignKey('Tutor.id')),
-                        db.Column('tag_id', db.Integer, db.ForeignKey('Tag.id')),
-                        db.Column('created', db.TIMESTAMP, default=datetime.datetime.utcnow))
-
-
 class Tag(db.Model):
     __tablename__ = 'Tag'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    tutors = db.relationship('Tutor', secondary=TaggedTutors, backref='tutor', lazy='dynamic')
+    users = db.relationship('User', secondary=TaggedUsers, backref='user', lazy='dynamic')
 
     def __init__(self, name):
         self.name = name
@@ -174,18 +167,10 @@ class Tag(db.Model):
     def __repr__(self):
         return '<Subject %r>' % self.name
 
-
-class Tutor(db.Model):
-    __tablename__ = 'Tutor'
-    id = db.Column(db.Integer, primary_key=True)
-    user = db.Column(db.Integer, db.ForeignKey(User.id))
-    tags = db.relationship('Tag', secondary=TaggedTutors, backref='tag', lazy='dynamic')
-
-
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user = db.Column(db.Integer, db.ForeignKey(User.id))
-    tutor = db.Column(db.Integer, db.ForeignKey(Tutor.id))
+    tutor = db.Column(db.Integer, db.ForeignKey(User.id))
     rating = db.Column(db.Integer)
     comment = db.Column(db.String(1000), nullable=True)
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
@@ -202,22 +187,3 @@ class Rating(db.Model):
     def __repr__(self):
         return "<Rating {rating} : {comment}>".format(rating= self.rating,
                                                       comment= self.comment if self.comment else "")
-
-<<<<<<< HEAD
-def sendgrid(object):
-    def __init__(self):
-        self.email = sendgrid.SendGridClient(app.config['sendgrid_username'], app.config['sendgrid_password'])
-
-    def send(self, to, student_name, tutor_subject, student_email, student_phone):
-
-        message = sendgrid.Mail()
-        message.add_to(to)
-        message.set_subject('College.Cat Request for Tutor')
-        message.set_html(app.config['college_cat_email'] % (student_name, tutor_subject, student_name, student_email, student_phone ))
-        message.set_text(app.config['college_cat_email'] % (student_name, tutor_subject, student_name, student_email, student_phone ))
-        message.set_from('CollegeCat Admin <admin@college.cat>')
-
-        self.email.send(message)
-=======
-
->>>>>>> MarcJunk
