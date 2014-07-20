@@ -3,7 +3,7 @@ from app import app
 from flask.ext import restful
 from flask.ext.restful import reqparse
 from flask.ext.login import LoginManager, login_user, login_required, logout_user, current_user, redirect
-from flask import render_template
+from flask import render_template, request
 from search import SearchTags
 
 import errors
@@ -84,7 +84,25 @@ class Ratings(restful.Resource):
 
         return restify(data=args)
 
+    @login_required
+    def post(self, tutor_id):
+        args = request.get_json(force=True)
+        value =  args.get("rating")
+        comment = args.get("comment")
 
+        current_user_id = current_user.id
+
+        try:
+            newRating = Rating(user=current_user_id,
+                               tutor=tutor_id,
+                               rating=value,
+                               comment=comment if comment else None)
+            db.session.add(newRating)
+            db.session.commit()
+        except Exception as e:
+            print "Couldn't add rating because %r" % e
+            db.session.rollback()
+            raise errors.InvalidUsage("Unable to add rating, sorry!")
 
 
 api.add_resource(Ratings, '/api/rating/<int:tutor_id>')
@@ -197,7 +215,25 @@ class CreateInvoice(restful.Resource):
 
 api.add_resource(CreateInvoice, '/api/create_invoice/<int:appointment_id>/<int:session_amount>')
 
-class LoginUser(restful.Resource):
+class LoginCat(restful.Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('username', type=str, help='user name', required=True)
+        parser.add_argument('password', type=str, help='user password', required=True)
+        args = parser.parse_args()
+
+        username = args['username']
+        password = args['password']
+
+
+
+        cat = User.query.filter_by(username=username).all()[0]
+        print "Found user : %r" % cat
+        if cat and cat.password == password:
+            login_user(cat)
+        else:
+            raise errors.Permission("Incorrect username or password")
+
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('username', type=str, help='user name', required=True)
@@ -209,21 +245,21 @@ class LoginUser(restful.Resource):
 
 
 
-        user = User.query.filter_by(username=username).all()[0]
-        print "Found user : %r" % user
-        if user and user.password == password:
-            login_user(user)
+        cat = User.query.filter_by(username=username).all()[0]
+        print "Found user : %r" % cat
+        if cat and cat.password == password:
+            login_user(cat)
         else:
             raise errors.Permission("Incorrect username or password")
 
-api.add_resource(LoginUser, '/api/login')
+api.add_resource(LoginCat, '/api/login')
 
 
 
-@app.route('/api/logout')
+@app.route('/api/logout', methods=['GET', 'POST'])
 @login_required
 def logout_cat():
-    message = "Good Bye " + current_user.name
+    message = "Good Bye " + current_user.name  + ", come again!"
     print message
     logout_user()
     return redirect("http://college.cat")
@@ -265,7 +301,7 @@ def restify(data, status=None):
     else:
         raise errors.SystemError("Restify wasn't given correct params")
 
-    return {'data': data,
+    return {'data': data or {},
             'status': status}, status
 
 
