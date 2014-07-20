@@ -5,6 +5,8 @@ from flask.ext.restful import reqparse
 from flask import render_template
 import errors
 
+from models import *
+
 api = restful.Api(app)
 
 class HelloWorld(restful.Resource):
