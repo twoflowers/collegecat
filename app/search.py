@@ -75,7 +75,7 @@ class SearchTags(object):
         for tutor in potential_tutors:
             distance = self.filter_by_radius(user_gps=user_gps, tutor=tutor, radius=radius)
             if not distance:
-                continue
+                distance = 5
 
             tags = tutor.tags.all()
 
