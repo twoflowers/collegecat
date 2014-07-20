@@ -1,6 +1,7 @@
 # Built In
 import datetime
 import json
+import time
 
 # Module
 from app import app
@@ -272,3 +273,15 @@ class Appointment(db.Model):
         self.user = user_id
         self.tutor = tutor_id
         self.message = message
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        unix_time = time.mktime(self.created.timetuple())
+        return {
+            'id': self.id,
+            'tutor': User.query.get(self.tutor).serialize,
+            'message': self.message,
+            'created': unix_time,
+            'invoice': self.invoice
+        }

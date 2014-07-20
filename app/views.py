@@ -100,8 +100,10 @@ class UserProfile(restful.Resource):
     def get(self, user_id):
         try:
             user = User.query.get(user_id)
+            appointments = Appointment.query.filter_by(user=user_id)
             return restify(data={
-                'user': user.serialize
+                'user': user.serialize,
+                'appointments': [appt.serialize for appt in appointments]
             })
         except Exception as e:
             return restify(data=e)
