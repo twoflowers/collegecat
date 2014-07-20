@@ -289,7 +289,8 @@ def handler_unauthorized(error):
 
 @app.errorhandler(errors.SystemError)
 def handle_system_error(error):
-    return restify(error)
+    response, code = restify(error)
+    return jsonify(response), code
 
 
 @app.errorhandler(errors.InvalidUsage)
