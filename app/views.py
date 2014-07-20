@@ -253,6 +253,7 @@ class LoginCat(restful.Resource):
         print "Found user : %r" % cat
         if cat and cat.password == password:
             login_user(cat)
+            return {'user_id':cat.id}
         else:
             raise errors.Permission("Incorrect username or password")
 
