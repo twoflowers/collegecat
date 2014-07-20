@@ -2,7 +2,9 @@ from math import sin, cos, radians, acos
 import requests, json
 from app import app
 import errors
-from models import db, Price, User
+from models import db, Price, User, Rating
+
+from sqlalchemy import func
 
 # http://en.wikipedia.org/wiki/Earth_radius
 """For Earth, the mean radius is 6,371.009 km (3,958.761 mi; 3,440.069 nmi)"""
@@ -53,7 +55,7 @@ class SearchTags(object):
             else:
                 return None
 
-    def query(self, user_gps, search_term=None, radius=30, max_price=None):
+    def query(self, user_gps, search_term=None, radius=30, max_price=None, min_rating=0):
         """
         filter_by using subject
         loop through results
@@ -67,7 +69,7 @@ class SearchTags(object):
         :param max_price:
         :return:
         """
-        potential_tutors = []
+
         filtered_tutors = []
         potential_tutors = db.session.query(User).filter_by(tutor=True).all()
         for tutor in potential_tutors:
@@ -95,6 +97,10 @@ class SearchTags(object):
                     continue
 
             # Didn't get filtered out, so add them to the list
-            filtered_tutors.append(tutor)
-        print "I'm returning %r tutors" % len(filtered_tutors)
+            formatted_tutor = dict(tutor.serialize)
+            ratings = db.session.query(Rating).filter_by(tutor=tutor.id).all()
+            print "Ratings %r" % ratings
+            formatted_tutor.update(rating=sum([float(rating.rating) for rating in ratings])/len(ratings) if ratings else 0)
+            if formatted_tutor['rating'] >= min_rating:
+                filtered_tutors.append(formatted_tutor)
         return filtered_tutors
