@@ -34,7 +34,7 @@ class Search(restful.Resource):
             kwargs.update(radius=radius)
 
         if rating:
-            kwargs.update(rating=rating)
+            kwargs.update(min_rating=rating)
 
         if query:
             kwargs.update(search_term=query)
