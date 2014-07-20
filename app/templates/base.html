@@ -10,7 +10,8 @@
     <link rel="icon" href="/static/img/cat.png">
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="/static/css/bootstrap.yeti.min.css">
     <!-- Optional theme -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <!-- select 2 css -->
@@ -118,6 +119,16 @@
           .capitalize {
             text-transform: capitalize;
           }
+
+          .btn-default {
+            color: #222 !important;
+          }
+          .btn {
+            padding: 5px 12px !important;
+          }
+          .navbar-brand {
+            color: #222 !important;
+          }
     </style>
   </head>
   <body>
@@ -156,7 +167,6 @@
           </form>
         </div>
         <div class="navbar-right navbar-form" id="anonymous_buttons">
-          <a href="#" class="btn btn-warning">Register</a>
           <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#login_modal">Login</a>
         </div>
         <div class="navbar-right navbar-form" id="profile_buttons" style="display:none;">
@@ -302,8 +312,8 @@ Rate your tutors, help others get the best tutors they can with your reviews.  T
     <script type="text/html" id="results_template">
       <div class="row well" style="vertical-align: middle">
         <div class="col-lg-2 pull-left center">
-          <img src="/static/img/profile-placeholder.png"><br>
-          <a class="btn btn-warning margin-top-10" href="#" data-toggle="modal" data-target="#contact_<%=id%>">Contact</a>
+          <img src="/static/img/profile-placeholder.png" style="margin-top: 55px;"><br>
+          <a class="btn btn-warning margin-top-10" href="#" data-toggle="modal" data-target="#contact_<%=id%>">Contact Tutor</a>
         </div>
         <div class="col-lg-7">
           <div class="container-fluid">
