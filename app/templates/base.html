@@ -21,7 +21,7 @@
           body {
             padding-top: 50px;
             padding-bottom: 20px;
-            background: url(/static/img/cat-background.jpg) no-repeat center center fixed;
+            background: url(/static/img/blurtunnel.jpg) no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
@@ -80,6 +80,15 @@
           h3 {
             margin-top: 5px;
           }
+
+          .map-image {
+            border-radius: 5px;
+            border: solid 1px #c4c4c4;
+          }
+
+          .well {
+            opacity: 0.9;
+          }
     </style>
   </head>
   <body>
@@ -134,12 +143,46 @@
       <h3>Why register?</h3>
 Intently stare at the same spot hunt anything that moves swat at dog. Behind the couch stick butt in face yet leave hair everywhere so lick butt so behind the couch. Roll around. Roll around hunt anything that moves so hopped up on goofballs. Intrigued by the shower. Hunt anything that moves play time, and missing until dinner time throwup on your pillow. Destroy couch behind the couch all of a sudden go crazy sun bathe chase mice, yet chew iPad power cord. Hopped up on goofballs under the bed sleep on keyboard. Missing until dinner time behind the couch. Mark territory need to chase tail. Rub face on everything intently sniff hand.
       <h3 class="margin-top-20">Why register?</h3>
-Intently stare at the same spot hunt anything that moves swat at dog. Behind the couch stick butt in face yet leave hair everywhere so lick butt so behind the couch. Roll around. Roll around hunt anything that moves so hopped up on goofballs. Intrigued by the shower. Hunt anything that moves play time, and missing until dinner time throwup on your pillow. Destroy couch behind the couch all of a sudden go crazy sun bathe chase mice, yet chew iPad power cord. Hopped up on goofballs under the bed sleep on keyboard. Missing until dinner time behind the couch. Mark territory need to chase tail. Rub face on everything intently sniff hand.
-
+Intrigued by the shower inspect anything brought into the house yet why must they do that and play time stand in front of the computer screen so chase mice and stare at ceiling. Under the bed. Intrigued by the shower missing until dinner time but stare at ceiling claw drapes so flop over shake treat bag yet flop over. Hate dog chew iPad power cord hopped up on goofballs. Find something else more interesting. Run in circles lick butt, but intently stare at the same spot.
     </div>
+
 
     <div class="container-narrow" id="search_results">
     </div>
+    <script type="text/html" id="results_template">
+      <div class="row well" style="vertical-align: middle">
+        <div class="col-lg-2 pull-left center">
+          <img src="/static/img/profile-placeholder.png"><br>
+          <a class="btn btn-warning margin-top-10" href="/<%=id%>">Schedule</a>
+        </div>
+        <div class="col-lg-7">
+          <div class="container-fluid">
+            <div class="row">
+              <h4 class=""><%=name%> </h4>
+              <h4 class="">
+                <% for (var i = 1; i <= 5; i++ ) { %>
+                  <% if (rating >= i) { %>
+                    <img src="/static/img/cat-paw-empty.png">
+                  <% } %>
+                <% } %>
+              </h4>
+            </div>
+          </div>
+          <p class="clear"><b>Bio:</b> <%=bio%></p>
+          <p class="clear"><b>Subjects:</b>
+            <% for (var i = 0; i < subjects.length; i++ ) { %>
+              <span class="label label-primary" style="text-transform: capitalize; font-size: 13px; margin-right: 5px;"><%=subjects[i]%> $<%=price[i]%>/hr </span>
+            <% } %>
+          </p>
+          <p class="clear"><b>Availability:</b> <%=availability%></p>
+        </div>
+        <div class="col-lg-3 center pull-right">
+          <img width="200px" height="200px" class="map-image" src="http://maps.googleapis.com/maps/api/staticmap?center=<%=latitude%>,<%=longitude%>&zoom=13&size=200x200&scale=2maptype=roadmap
+&markers=color:blue%7Clabel:S%7CPH&key=AIzaSyBw5N_6bBRyOev1rfNlCm7IpAthbv2AWRw">
+          <a href="https://www.google.com/maps/@<%=latitude%>,<%=longitude%>,13z" class="btn btn-default margin-top-10" target="_blank">Enlarge Map</a>
+        </div>
+      </div>
+    </script>
 
     <!--{% block content %}{% endblock %}-->
 
@@ -148,40 +191,6 @@ Intently stare at the same spot hunt anything that moves swat at dog. Behind the
       <p class="center visible"><img src="/static/img/poweredby.png"></p>
     </div>
   </body>
-  <script type="text/html" id="results_template">
-      <div class="row well" style="vertical-align: middle">
-        <div class="col-lg-2 pull-left center">
-          <img src="/static/img/profile-placeholder.png"><br>
-          <a class="btn btn-warning margin-top-10" href="/<%=id%>">Contact</a>
-        </div>
-        <div class="col-lg-7">
-          <div class="container-fluid">
-            <div class="row">
-              <h4 class=""><%=name%> </h4>
-
-              <h4 class="">
-                <% for (var i = 1; i <= 5; i++ ) { %>
-                  <% if (rating >= i) { %>
-                    <img src="/static/img/cat-paw-empty.png">
-                  <% } } %>
-              </h4>
-            </div>
-          </div>
-          <p class="clear"><b>Bio:</b> <%=bio%></p>
-          <p class="clear"><b>Subjects:</b>
-            <% for (var i = 0; i < subjects.length; i++ ) { %>
-              <span class="label label-success" style="text-transform: capitalize;"><%=subjects[i]%></span>
-            <% } %>
-          </p>
-          <p class="clear"><b>Availability:</b> <%=availability%></p>
-        </div>
-        <div class="col-lg-3 center pull-right">
-          <img width="200px" height="200px" src="http://maps.googleapis.com/maps/api/staticmap?center=<%=latitude%>,<%=longitude%>&zoom=13&size=200x200&scale=2maptype=roadmap
-&markers=color:blue%7Clabel:S%7CPH&key=AIzaSyBw5N_6bBRyOev1rfNlCm7IpAthbv2AWRw">
-          <a href="https://www.google.com/maps/@<%=latitude%>,<%=longitude%>,13z" class="btn btn-default margin-top-10" target="_blank">Enlarge Map</a>
-        </div>
-      </div>
-  </script>
   <script src="/static/js/template.js"></script>
   <script src="/static/js/search.js"></script>
 </html>
