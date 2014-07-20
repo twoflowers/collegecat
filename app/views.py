@@ -96,6 +96,19 @@ class Subjects(restful.Resource):
 
 api.add_resource(Subjects, '/api/subjects')
 
+class UserProfile(restful.Resource):
+    def get(self, user_id):
+        try:
+            user = User.query.get(user_id)
+            return restify(data={
+                'user': user.serialize
+            })
+        except Exception as e:
+            return restify(data=e)
+
+
+api.add_resource(UserProfile, '/api/profile/<int:user_id>')
+
 @app.route('/')
 def index():
     return render_template('base.html')
@@ -125,6 +138,7 @@ def restify(data, status=None):
         status = int(status or 200)
 
     else:
+        print data
         raise errors.SystemError("Restify")
 
     return {'data': data,

@@ -174,7 +174,14 @@ class User(db.Model):
        """Return object data in easily serializeable format"""
        return {
            'id': self.id,
-           'username': self.username
+           'username': self.username,
+           'email': self.email,
+           'name': self.name,
+           'bio': self.bio,
+           'location': [loc.serialize for loc in self.loc],
+           'tags': [tag.serialize for tag in self.tags],
+           'phone': self.phone,
+
        }
 
 
@@ -197,6 +204,18 @@ class Location(db.Model):
     def __repr__(self):
         return '<Location {city}, {state} {zip} (gps:{gps})>'.format(city=self.city, state=self.city,
                                                                      zip=zip, gps=self.gps)
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'street': self.street,
+            'city': self.city,
+            'state': self.state,
+            'zip': self.zip,
+            'gps': self.gps
+        }
 
 
 class Tag(db.Model):
