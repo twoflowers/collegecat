@@ -59,3 +59,15 @@ def restify(data, status=None):
 
     return {'data': data,
             'status': status}, status
+
+
+@app.route('/find_invoice/<invoice_id>')
+def find_invoice(invoice_id):
+    invoice = SimplifyProcessor()
+    print invoice.find_invoices(invoice_id)
+
+@app.route('/create_invoice/<user_id>/<int:amount>')
+def create_invoice(user_id, amount):
+    invoice = SimplifyProcessor()
+
+    print invoice.create_invoice(user_id, amount)
