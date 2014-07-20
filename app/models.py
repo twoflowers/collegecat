@@ -140,6 +140,18 @@ TaggedUsers = db.Table('TaggedUsers',
                        db.Column('created', db.TIMESTAMP, default=datetime.datetime.utcnow))
 
 
+class Price(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    price = db.Column(db.Integer)
+    tag = db.Column(db.Integer, db.ForeignKey('Tag.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __init__(self, price, tag, user_id):
+        self.price = price
+        self.tag = tag
+        self.user_id = user_id
+
+
 class User(db.Model):
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
