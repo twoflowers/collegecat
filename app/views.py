@@ -3,18 +3,40 @@ from app import app
 from flask.ext import restful
 from flask.ext.restful import reqparse
 from flask import render_template
+from search import SearchTags
+
 import errors
 
 from models import *
 
 api = restful.Api(app)
 
-class HelloWorld(restful.Resource):
+
+class Search(restful.Resource):
     def get(self):
-        return restify(data="Hello World")
+        parser = reqparse.RequestParser()
+        parser.add_argument('query', type=str, help='Search for any subject you need tutoring for.')
+        parser.add_argument('price', type=int, help='What is the highest price you would pay? No cents to it!')
+        parser.add_argument('lat', type=float, required=True, help="Need both GPS coordinates, latitude missing")
+        parser.add_argument('lon', type=float, required=True, help="Need both GPS coordinates, longitude missing")
+        parser.add_argument('radius', type=float, help="How far are you willing to travel")
+        args = parser.parse_args()
+
+        query = args['query']
+        max_price = args['price']
+        user_gps = {'lat': args['lat'], 'lon': args['lon']}
+        radius = args['radius']
+
+        kwargs = dict(user_gps=user_gps, search_term=query, max_price=max_price)
+        if radius:
+            kwargs.update(radius=radius)
+
+        results = SearchTags().query(**kwargs)
+        print str(results)
+        return restify(data=[result.serialize for result in results])
 
 
-api.add_resource(HelloWorld, '/api/')
+api.add_resource(Search, '/api/search/')
 
 
 class Ratings(restful.Resource):
@@ -31,7 +53,7 @@ class Ratings(restful.Resource):
                 tutor = User.query.get(tutor_id)
                 if not tutor:
                     return restify({"message": "Tutor_id does not exist"}, 400)
-                rating = Rating(user=user_id,tutor=tutor_id,rating=int(args['rating']),comment=args['comment'])
+                rating = Rating(user=user_id, tutor=tutor_id, rating=int(args['rating']), comment=args['comment'])
                 db.session.add(rating)
             else:
                 rating.rating = int(args['rating'])
