@@ -6,13 +6,18 @@ echo "BLAARG!"
 yum -y install http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-11.ius.centos6.noarch.rpm http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/epel-release-6-5.noarch.rpm
 yum -y install mysql-server python27 python27-pip python27-tools python27-devel vim-enhanced mysql-devel
 pip2.7 install -r /var/www/collegecat/requirements.txt
+pip2.7 uninstall simplifycommerce-sdk-python -y
+cd /usr/src; wget -O simplifycommerce-sdk-python-1.1.2.tgz https://www.simplify.com/commerce/static/sdk/python/simplifycommerce-sdk-python-1.1.2.tgz
+tar xzf simplifycommerce-sdk-python-1.1.2.tgz
+cd simplifycommerce-sdk-python-1.1.2
+python2.7 setup.py install
 chkconfig mysqld on
 service mysqld start
 mysql -uroot -e 'GRANT ALL PRIVILEGES ON *.* TO "collegecat"@"localhost" IDENTIFIED BY "UrNotAG04t"; FLUSH PRIVILEGES';
-mysql -uroot -e 'CREATE DATABASE collegecat;'
+mysql -uroot -e 'DROP DATABASE IF EXISTS collegecat; CREATE DATABASE collegecat;'
 echo "Populating random data"
 cd /var/www/collegecat/app/
-/usr/bin/python2.7 /var/www/collegecat/app/generate_data.py | tail
+/usr/bin/python2.7 /var/www/collegecat/app/generate_data.py
 #rm -fv /etc/nginx/conf.d/default.conf
 #cp -v /var/www/collegecat/nginx.conf /etc/nginx/conf.d/collegecat.conf
 #mkdir -pv /var/log/uwsgi/ /etc/supervisord.d
@@ -20,6 +25,7 @@ cd /var/www/collegecat/app/
 #cp -v /var/www/collegecat/supervisord.conf /etc/supervisord.d/collegecat.conf
 cp -fv /var/www/collegecat/upstart.conf /etc/init/collegecat.conf
 service iptables stop;chkconfig iptables off
+stop collegecat
 start collegecat
 EOF
 
