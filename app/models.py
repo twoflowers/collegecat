@@ -154,6 +154,14 @@ class Price(db.Model):
         self.tag = tag
         self.user_id = user_id
 
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'price': self.price
+        }
+
 
 class User(db.Model):
     __tablename__ = "user"
@@ -252,7 +260,8 @@ class Tag(db.Model):
        """Return object data in easily serializeable format"""
        return {
            'id': self.id,
-           'name': self.name
+           'name': self.name,
+           'price': Price.query.get(self.id).serialize
            # 'users' : [user.serialize for user in self.users]
        }
 
