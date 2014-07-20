@@ -48,6 +48,9 @@ function login(data, login_button) {
         $('.delete_appt').on('click', function() {
             delete_appt($(this));
         });
+        $('.invoice_appt').on('click', function() {
+            invoice_appt($(this));
+        });
     })
     .always(function () {
         if (typeof login_button != 'undefined') {
@@ -62,6 +65,21 @@ function delete_appt(element) {
 
     $.ajax({
         url: "/api/delete_appointment/" + id,
+    })
+    .done(function(data) {
+        login(profile['user']);
+    })
+    .always(function () {
+        element.button('reset');
+    });
+}
+
+function invoice_appt(element) {
+    var id = element.data('appointment-id');
+    element.button('loading');
+
+    $.ajax({
+        url: "/api/create_invoice/" + id + "/" + parseInt(Math.floor((Math.random() * 9900) + 100), 10),
     })
     .done(function(data) {
         login(profile['user']);

@@ -97,5 +97,4 @@ $.get('/api/subjects', function(data) {
     $("#search").typeahead({source: subjects});
 },'json');
 
-// window.onload = function () { get_location() };
-window.onload = function () { set_location('Overland Park, KS'); set_search(''); };
+window.onload = function () { get_location() };

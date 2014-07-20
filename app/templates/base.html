@@ -97,21 +97,23 @@
           .well {
             opacity: 0.9;
           }
+
           .subject {
             text-transform: capitalize;
-            font-size: 13px;
-            padding-right: 0px;
-          }
-          .price {
             font-size: 12px;
-            margin-top: 1px;
-            margin-bottom: 2px;
+            padding-right: 2px;
+          }
+
+          .price {
+            font-size: 11px;
             padding-bottom: 2px;
-            margin-left: 0px;
+            padding-top: 0px;
+            margin-left: 2px;
             background-color: white;
             margin-right: -2px !important;
             color: #646464;
           }
+
           .capitalize {
             text-transform: capitalize;
           }
@@ -278,10 +280,13 @@ Rate your tutors, help others get the best tutors they can with your reviews.  T
           <td><%=moment.unix(appointments[i]['created']).fromNow()%></td>
           <td>
           <% if (appointments[i]['tutor']['id'] == profile['user']['id'] && !appointments[i]['invoice']) { %>
-            <button type="button" class="btn btn-primary">Invoice</button>
+            <button type="button" class="btn btn-primary invoice_appt" data-loading-text="Invoicing..." data-appointment-id="<%=appointments[i].id%>">Invoice Student</button>
+          <% } else if (!appointments[i]['invoice']) { %>
             <button type="button" class="btn btn-danger delete_appt" data-loading-text="Removing..." data-appointment-id="<%=appointments[i].id%>">
               Remove
             </button>
+          <% } else if (appointments[i]['amount']) { %>
+            $<%=appointments[i]['amount']/100%> invoiced
           <% } %>
           </td>
         </tr>
