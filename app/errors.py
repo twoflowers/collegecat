@@ -17,6 +17,8 @@ class Error(Exception):
 class InvalidUsage(Error):
     status_code = 400
 
+class Permission(Error):
+    status_code = 403
 
 class SystemError(Error):
     status_code = 500

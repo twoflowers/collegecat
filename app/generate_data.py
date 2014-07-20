@@ -156,7 +156,7 @@ for row in csv_file:
     newUser = models.User(
         name="%s %s" % (row['GivenName'], row['Surname']),
         username=row['Username'].lower(),
-        password=row['Password'],
+        password="password", #row['Password'],
         email=row['EmailAddress'],
         phone=row['TelephoneNumber'],
         payment='B6Epo8Kn'
