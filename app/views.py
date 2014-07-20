@@ -20,20 +20,30 @@ class Search(restful.Resource):
         parser.add_argument('lat', type=float, required=True, help="Need both GPS coordinates, latitude missing")
         parser.add_argument('lon', type=float, required=True, help="Need both GPS coordinates, longitude missing")
         parser.add_argument('radius', type=float, help="How far are you willing to travel")
+        parser.add_argument('rating', type=float, help="What's the lowest rating you'd accept")
         args = parser.parse_args()
 
         query = args['query']
         max_price = args['price']
         user_gps = {'lat': args['lat'], 'lon': args['lon']}
         radius = args['radius']
+        rating = args['rating']
 
-        kwargs = dict(user_gps=user_gps, search_term=query, max_price=max_price)
+        kwargs = dict(user_gps=user_gps)
         if radius:
             kwargs.update(radius=radius)
 
+        if rating:
+            kwargs.update(rating=rating)
+
+        if query:
+            kwargs.update(search_term=query)
+
+        if max_price:
+            kwargs.update(max_price=max_price)
+
         results = SearchTags().query(**kwargs)
-        print str(results)
-        return restify(data=[result.serialize for result in results])
+        return restify(data=results)
 
 
 api.add_resource(Search, '/api/search/')
