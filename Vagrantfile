@@ -14,7 +14,7 @@ python2.7 setup.py install
 chkconfig mysqld on
 service mysqld start
 mysql -uroot -e 'GRANT ALL PRIVILEGES ON *.* TO "collegecat"@"localhost" IDENTIFIED BY "UrNotAG04t"; FLUSH PRIVILEGES';
-mysql -uroot -e 'DROP DATABASE collegecat; CREATE DATABASE collegecat;'
+mysql -uroot -e 'DROP DATABASE IF EXISTS collegecat; CREATE DATABASE collegecat;'
 echo "Populating random data"
 cd /var/www/collegecat/app/
 /usr/bin/python2.7 /var/www/collegecat/app/generate_data.py
