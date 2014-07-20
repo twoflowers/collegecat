@@ -18,8 +18,8 @@ db = SQLAlchemy(app)
 class SimplifyProcessor(object):
     def __init__(self):
 
-        simplify.public_key = app.config['simplify_public_key']
-        simplify.private_key = app.config['simplify_private_key']
+        simplify.public_key = app.config['SIMPLIFY_PUBLIC_KEY']
+        simplify.private_key = app.config['SIMPLIFY_PRIVATE_KEY']
 
     def make_payment(self, cc_number, cc_exp_month, cc_exp_year, cc_cvc, amount, description):
         try:
@@ -70,11 +70,9 @@ class SimplifyProcessor(object):
         return True
 
 
-    def create_invoice(self, customer, amount ):
-        user = self.find_user(customer)
-
+    def create_invoice(self, customer, amount):
         invoice = simplify.Invoice.create({
-            "memo" : "This is a memo",
+            "memo" : "College.Cat Tutoring Session",
             "items" : [{
                   "amount" : amount,
                   "quantity" : "1",
@@ -82,13 +80,18 @@ class SimplifyProcessor(object):
                }],
             "email" : "customer@mastercard.com",
             "name" : "Customer Customer",
-            "cucstomer": customer,
-            "note" : "This is a note",
+            "customer": customer,
+            "note" : "College.Cat Tutoring Session",
             "reference" : "Ref2"
             })
 
 
-        return invoice
+
+        return {
+            'success': True,
+            'status': 200
+        }
+
 
     def list_invoices(self, customer):
         return simplify.Invoice.list()
@@ -98,26 +101,6 @@ class SimplifyProcessor(object):
 
     def pay_invoices(self):
         return True
-
-class pipl(object):
-    def __init__(self):
-        self.pipl_api_key = app.config['pipl_key']
-        self.pipl_api_url = app.config['pipl_key']
-
-    def search (self, user_id, first_name, last_name, email_address):
-        # @todo update user table with information
-        # @todo clean up the return value
-        url = "%sfirst_name=%s&last_name=%s&email=%s&key=%s&pretty=true" % (
-            self.pipl_api_url,
-            first_name,
-            last_name,
-            email_address,
-            self.pipl_api_key)
-
-        req = requests.get(url)
-
-        return req.json()
-
 
 class SendgridProcessor(object):
     def __init__(self):
@@ -308,5 +291,6 @@ class Appointment(db.Model):
             'tutor': User.query.get(self.tutor).serialize,
             'message': self.message,
             'created': unix_time,
-            'invoice': self.invoice
+            'invoice': self.invoice,
+            'student': User.query.get(self.user).serialize,
         }
