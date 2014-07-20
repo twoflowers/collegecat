@@ -251,6 +251,7 @@ class Tag(db.Model):
            # 'users' : [user.serialize for user in self.users]
        }
 
+
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user = db.Column(db.Integer, db.ForeignKey(User.id))
