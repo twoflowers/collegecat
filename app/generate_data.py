@@ -123,6 +123,23 @@ subjects = [
     'World of Warcraft'
 ]
 
+bios = [
+    'Thinker. Introvert. Gamer. Alcohol ninja. Friendly tv fan. Amateur internet trailblazer. Hipster-friendly music junkie.',
+    'Unapologetic problem solver. Amateur entrepreneur. Explorer. Gamer. Devoted alcohol nerd. Professional introvert. Wannabe troublemaker.',
+    'Hipster-friendly music fan. Social media advocate. Avid pop culture maven. Troublemaker. Web aficionado. Thinker.',
+    'Award-winning thinker. Social mediaholic. Gamer. Twitter lover. Organizer.',
+    'Web aficionado. Zombie guru. Bacon fan. Entrepreneur. Award-winning pop culture advocate. Reader.',
+    'Alcohol aficionado. Web buff. Wannabe music enthusiast. Student. Travel fanatic. Professional tv evangelist. Typical social media scholar. Twitter lover.',
+    'Analyst. Alcohol buff. Award-winning travel expert. Zombie aficionado. Evil tv nerd.',
+    'Music fanatic. Hardcore introvert. Travel aficionado. Web ninja. Beer enthusiast. Entrepreneur. Food buff. Incurable pop culture scholar.',
+    'Freelance pop culture ninja. Infuriatingly humble beer maven. Alcohol aficionado. Extreme writer. Web nerd. Certified communicator.',
+    'Bacon fanatic. Friendly introvert. Travel nerd. Infuriatingly humble student. Total alcohol geek. Passionate problem solver. Analyst.',
+    'Web lover. Alcohol fanatic. Bacon maven. Travel aficionado. Zombie fanatic. Unapologetic student.',
+    'Typical gamer. Pop culture enthusiast. Communicator. Tv fanatic. Total organizer. Future teen idol. Professional webaholic.',
+    'Wannabe foodaholic. Social media lover. Bacon ninja. Zombie enthusiast. Travel maven. Beer fan.',
+    "Avatar, Entertainer, Green building lover, Man of Winter, Han Solo's College Roommate. In Russia, car drives you!"
+]
+
 users_added = 0
 tags_added = 0
 ratings_added = 0
@@ -145,6 +162,7 @@ for row in csv_file:
         payment='B6Epo8Kn'
     )
     newUser.loc.append(newLoc)
+    newUser.bio = random.choice(bios)
     db.session.add(newLoc)
     db.session.add(newUser)
     try:
@@ -162,7 +180,7 @@ for row in csv_file:
         tags.append('Chupacabras')
     elif newUser.username == 'tmartin':
         tags.append('Underwater Basket Weaving')
-        
+
     for tag in tags:
         try:
             newTag = models.Tag(tag)
