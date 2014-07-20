@@ -67,25 +67,6 @@ class SimplifyProcessor(object):
         # @todo not needed for this hack
         return True
 
-class pipl(object):
-    def __init__(self):
-        self.pipl_api_key = app.config['pipl_key']
-        self.pipl_api_url = app.config['pipl_key']
-
-    def search (self, user_id, first_name, last_name, email_address):
-        # @todo update user table with information
-        # @todo clean up the return value
-        url = "%sfirst_name=%s&last_name=%s&email=%s&key=%s&pretty=true" % (
-            self.pipl_api_url,
-            first_name,
-            last_name,
-            email_address,
-            self.pipl_api_key)
-
-        req = requests.get(url)
-
-        return req.json()
-
 
 def sendgrid(object):
     def __init__(self):
@@ -144,17 +125,6 @@ class Location(db.Model):
         return '<Location {city}, {state} {zip} (gps:{gps})>'.format(city=self.city, state=self.city,
                                                                      zip=zip, gps=self.gps)
 
-# class Department(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(100), unique=True)
-#
-#     def __init__(self, name):
-#         self.name = name
-#
-#     def __repr__(self):
-#         return '<Department %r>' % self.name
-
-
 TaggedTutors = db.Table('TaggedTutors',
                         db.Column("id", db.Integer, primary_key=True),
                         db.Column('tutor_id', db.Integer, db.ForeignKey('Tutor.id')),
@@ -202,22 +172,3 @@ class Rating(db.Model):
     def __repr__(self):
         return "<Rating {rating} : {comment}>".format(rating= self.rating,
                                                       comment= self.comment if self.comment else "")
-
-<<<<<<< HEAD
-def sendgrid(object):
-    def __init__(self):
-        self.email = sendgrid.SendGridClient(app.config['sendgrid_username'], app.config['sendgrid_password'])
-
-    def send(self, to, student_name, tutor_subject, student_email, student_phone):
-
-        message = sendgrid.Mail()
-        message.add_to(to)
-        message.set_subject('College.Cat Request for Tutor')
-        message.set_html(app.config['college_cat_email'] % (student_name, tutor_subject, student_name, student_email, student_phone ))
-        message.set_text(app.config['college_cat_email'] % (student_name, tutor_subject, student_name, student_email, student_phone ))
-        message.set_from('CollegeCat Admin <admin@college.cat>')
-
-        self.email.send(message)
-=======
-
->>>>>>> MarcJunk
