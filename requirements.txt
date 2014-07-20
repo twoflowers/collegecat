@@ -6,3 +6,4 @@ SQLAlchemy
 flask-SQLAlchemy
 sendgrid
 MySQL-python
+flask-login
