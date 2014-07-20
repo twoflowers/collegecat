@@ -29,9 +29,14 @@ function search(subject, location, radius) {
 function populate_search_results() {
     // TODO: populate search results
     var data = [
-        {'name': 'John Q. Public1'},
-        {'name': 'John Q. Public2'},
+        {'id': 12345, 'name': 'Tom Martin', 'rating': 3, 'subjects': ['math', 'programming', 'sheep'], 'availability': 'Anytime', 'bio': 'yo', 'latitude': '38.9237738', 'longitude': '-94.7306424'},
+        {'id': 12346, 'name': 'Stan Antov', 'rating': 5, 'subjects': ['design', 'programming', 'goats'], 'availability': 'Anytime', 'bio': 'yo', 'latitude': '38.9237738', 'longitude': '-94.7306424'},
+        {'id': 12347, 'name': 'Marc Streeter', 'rating': 4, 'subjects': ['chupacabras'], 'availability': 'Anytime', 'bio': 'yo', 'latitude': '38.9237738', 'longitude': '-94.7306424'},
     ];
+
+    if (data) {
+        $('#why').hide();
+    }
     results_container = $('#search_results');
     var results_html = '';
     for (var index in data) {

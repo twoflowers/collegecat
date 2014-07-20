@@ -17,6 +17,7 @@ db.create_all()
 subjects = [
     'Academic Achievement Center',
     'Accounting',
+    'Algebra',
     'Administration of Justice',
     'American Sign Language',
     'Animation',
@@ -94,6 +95,7 @@ subjects = [
     'Music',
     'Nursing',
     'Philosophy',
+    'PHP',
     'Photography',
     'Physical Ed, Health & Rec',
     'Physical Science',
@@ -102,6 +104,7 @@ subjects = [
     'Polysomnography/Sleep Tech',
     'Practical Nursing',
     'Psychology',
+    'Python',
     'Railroad Conductor',
     'Railroad Electronics',
     'Railroad Industrial Technology',
@@ -116,6 +119,10 @@ subjects = [
     'Theater',
     'Women and Gender Studies',
 ]
+
+users_added = 0
+tags_added = 0
+ratings_added = 0
 
 for row in csv_file:
     print row
@@ -139,6 +146,7 @@ for row in csv_file:
     db.session.add(newUser)
     try:
         db.session.commit()
+        users_added += 1
     except sqlalchemy.exc.IntegrityError:
         db.session.rollback()
         continue
@@ -151,6 +159,7 @@ for row in csv_file:
             newTag = models.Tag(tag)
             newUser.tags.append(newTag)
             db.session.commit()
+            tags_added += 1
         except sqlalchemy.exc.IntegrityError:
             db.session.rollback()
             try:
@@ -162,15 +171,37 @@ for row in csv_file:
                 continue
             continue
 
+    total_users = db.session.query(models.User).count()
+    if random.randint(0, 1000) > 500:
+        is_good = random.randint(0, 1000) < 500
+        # Randomly decide whether they get any ratings at all
+        for rating_no in range(0, random.randint(0, 13)):
+            if is_good:
+                max_rating = 5
+                min_rating = 3
+            else:
+                max_rating = 3
+                min_rating = 0
 
+            try:
+                # print "Adding rating # %s" % rating_no
+                ratingUser = models.User.query.get(random.randint(1, total_users))
+                newRating = models.Rating(
+                    user=ratingUser.id,
+                    tutor=newUser.id,
+                    rating=random.randint(min_rating, max_rating),
+                    comment=""
+                )
+                db.session.add(newRating)
+                db.session.commit()
+                ratings_added += 1
+            except Exception as e:
+                print "Exception: %r" % e
+                db.session.rollback()
+                continue
 
-
-
-
-
-
-# db = models.db
-# testUser = models.User('testuser', 'adfadsfasdf', 'asdfasdf@asfdf.com', 'as', 'FirstName LastName')
-# db.session.add(testUser)
-# db.session.commit()
-
+print "Added Users: %s Ratings: %s Tags: %s" % (
+    users_added,
+    ratings_added,
+    tags_added
+)

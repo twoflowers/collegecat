@@ -10,6 +10,8 @@ chkconfig mysqld on
 service mysqld start
 mysql -uroot -e 'GRANT ALL PRIVILEGES ON *.* TO "collegecat"@"localhost" IDENTIFIED BY "UrNotAG04t"; FLUSH PRIVILEGES';
 mysql -uroot -e 'CREATE DATABASE collegecat;'
+echo "Populating random data"
+/usr/bin/python2.7 /var/www/collegecat/app/generate_data.py | tail
 #rm -fv /etc/nginx/conf.d/default.conf
 #cp -v /var/www/collegecat/nginx.conf /etc/nginx/conf.d/collegecat.conf
 #mkdir -pv /var/log/uwsgi/ /etc/supervisord.d

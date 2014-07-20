@@ -20,8 +20,8 @@
     <style type="text/css">
           body {
             padding-top: 50px;
-            padding-bottom: 40px;
-            background: url(/static/img/blurtunnel.jpg) no-repeat center center fixed;
+            padding-bottom: 20px;
+            background: url(/static/img/cat-background.jpg) no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
@@ -38,6 +38,10 @@
             width: 98%;
           }
 
+          .navbar {
+            background-color: rgba(0, 0, 0, 0);
+          }
+
           /* Custom container */
           .container-narrow {
             margin: 0 auto;
@@ -49,7 +53,7 @@
           }
 
           .footer {
-            opacity: 0.5;
+            opacity: 0.7;
           }
 
           .center {
@@ -68,6 +72,13 @@
 
           .margin-top-10 {
             margin-top: 10px;
+          }
+          .margin-top-20 {
+            margin-top: 20px;
+          }
+
+          h3 {
+            margin-top: 5px;
           }
     </style>
   </head>
@@ -119,13 +130,21 @@
       <p class="lead white center">We have tuna flavored treats!</p>
     </div>
 
+    <div class="container-narrow well" id="why">
+      <h3>Why register?</h3>
+Intently stare at the same spot hunt anything that moves swat at dog. Behind the couch stick butt in face yet leave hair everywhere so lick butt so behind the couch. Roll around. Roll around hunt anything that moves so hopped up on goofballs. Intrigued by the shower. Hunt anything that moves play time, and missing until dinner time throwup on your pillow. Destroy couch behind the couch all of a sudden go crazy sun bathe chase mice, yet chew iPad power cord. Hopped up on goofballs under the bed sleep on keyboard. Missing until dinner time behind the couch. Mark territory need to chase tail. Rub face on everything intently sniff hand.
+      <h3 class="margin-top-20">Why register?</h3>
+Intently stare at the same spot hunt anything that moves swat at dog. Behind the couch stick butt in face yet leave hair everywhere so lick butt so behind the couch. Roll around. Roll around hunt anything that moves so hopped up on goofballs. Intrigued by the shower. Hunt anything that moves play time, and missing until dinner time throwup on your pillow. Destroy couch behind the couch all of a sudden go crazy sun bathe chase mice, yet chew iPad power cord. Hopped up on goofballs under the bed sleep on keyboard. Missing until dinner time behind the couch. Mark territory need to chase tail. Rub face on everything intently sniff hand.
+
+    </div>
+
     <div class="container-narrow" id="search_results">
     </div>
 
     <!--{% block content %}{% endblock %}-->
 
-    <div class="footer">
-      <p class="center white visible">&copy;2014 college cat corpurrration</p>
+    <div class="footer margin-top-10">
+      <p class="center white visible">&copy;2014 college.cat corpurrration <img src="/static/img/cat-paw-empty.png" height="14" width="14"></p>
       <p class="center visible"><img src="/static/img/poweredby.png"></p>
     </div>
   </body>
@@ -133,7 +152,7 @@
       <div class="row well" style="vertical-align: middle">
         <div class="col-lg-2 pull-left center">
           <img src="/static/img/profile-placeholder.png"><br>
-          <button class="btn btn-warning margin-top-10">Contact</button>
+          <a class="btn btn-warning margin-top-10" href="/<%=id%>">Contact</a>
         </div>
         <div class="col-lg-7">
           <div class="container-fluid">
@@ -141,28 +160,28 @@
               <h4 class=""><%=name%> </h4>
 
               <h4 class="">
-                <i class="glyphicon glyphicon-star"></i>
-                <i class="glyphicon glyphicon-star"></i>
-                <i class="glyphicon glyphicon-star"></i>
-                <i class="glyphicon glyphicon-star"></i>
-                <i class="glyphicon glyphicon-star-empty"></i>
+                <% for (var i = 1; i <= 5; i++ ) { %>
+                  <% if (rating >= i) { %>
+                    <img src="/static/img/cat-paw-empty.png">
+                  <% } } %>
               </h4>
             </div>
           </div>
-          <p class="clear"><b>Bio:</b> Swat at dog run in circles but nap all day so lick butt swat at dog. Stare at ceiling. Chew foot chew iPad power cord and use lap as chair and rub face on everything chew foot. Hide when guests come over chew iPad power cord and stare at ceiling so behind the couch for roll around and lick butt under the bed. Find something else more interesting intently sniff hand stand in front of the computer screen, hunt anything that moves inspect anything brought into the house or hunt anything that moves, but roll around. Stretch nap all day under the bed. Run in circles burrow under covers claw drapes but run in circles stick butt in face under the bed. Missing until dinner time destroy couch for make muffins and chew foot for use lap as chair or make muffins and flop over. Destroy couch run in circles, or hopped up on goofballs intrigued by the shower.</p>
+          <p class="clear"><b>Bio:</b> <%=bio%></p>
           <p class="clear"><b>Subjects:</b>
-            <span class="label label-success">Programming</span>
-            <span class="label label-success">Math</span>
-            <span class="label label-success">Goats</span>
+            <% for (var i = 0; i < subjects.length; i++ ) { %>
+              <span class="label label-success" style="text-transform: capitalize;"><%=subjects[i]%></span>
+            <% } %>
           </p>
-          <p class="clear"><b>Availability:</b> Anytime</p>
+          <p class="clear"><b>Availability:</b> <%=availability%></p>
         </div>
         <div class="col-lg-3 center pull-right">
-          <img src="http://placehold.it/200x200" class="margin-top-10">
-          <button type="button" class="btn btn-default margin-top-10">Directions</button>
+          <img width="200px" height="200px" src="http://maps.googleapis.com/maps/api/staticmap?center=<%=latitude%>,<%=longitude%>&zoom=13&size=200x200&scale=2maptype=roadmap
+&markers=color:blue%7Clabel:S%7CPH&key=AIzaSyBw5N_6bBRyOev1rfNlCm7IpAthbv2AWRw">
+          <a href="https://www.google.com/maps/@<%=latitude%>,<%=longitude%>,13z" class="btn btn-default margin-top-10" target="_blank">Enlarge Map</a>
         </div>
       </div>
   </script>
-  <script src="/static/js/cat.js"></script>
+  <script src="/static/js/template.js"></script>
   <script src="/static/js/search.js"></script>
 </html>
