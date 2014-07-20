@@ -102,5 +102,6 @@ class SearchTags(object):
             print "Ratings %r" % ratings
             formatted_tutor.update(rating=sum([float(rating.rating) for rating in ratings])/len(ratings) if ratings else 0)
             if formatted_tutor['rating'] >= min_rating:
+                formatted_tutor.update(distance=distance)
                 filtered_tutors.append(formatted_tutor)
         return filtered_tutors
