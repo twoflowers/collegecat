@@ -2,6 +2,7 @@ from flask import jsonify
 from app import app
 from flask.ext import restful
 from flask.ext.restful import reqparse
+from flask.ext.login import LoginManager, login_user, login_required, logout_user, current_user, redirect
 from flask import render_template
 from search import SearchTags
 
@@ -9,7 +10,15 @@ import errors
 
 from models import *
 
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 api = restful.Api(app)
+
+@login_manager.user_loader
+def load_user(userid):
+    return User.query.get(userid)
 
 
 class Search(restful.Resource):
@@ -75,6 +84,9 @@ class Ratings(restful.Resource):
 
         return restify(data=args)
 
+
+
+
 api.add_resource(Ratings, '/api/rating/<int:tutor_id>')
 
 class CreateAppointment(restful.Resource):
@@ -134,9 +146,9 @@ class Login(restful.Resource):
         parser.add_argument('email', type=str, help='user email address')
         args = parser.parse_args()
 
-        return User.query.filter_by(email=email).first().serialize
-
 api.add_resource(Login, '/api/login/<email>')
+
+
 
 
 class UserProfile(restful.Resource):
@@ -185,13 +197,43 @@ class CreateInvoice(restful.Resource):
 
 api.add_resource(CreateInvoice, '/api/create_invoice/<int:appointment_id>/<int:session_amount>')
 
+class LoginUser(restful.Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('username', type=str, help='user name', required=True)
+        parser.add_argument('password', type=str, help='user password', required=True)
+        args = parser.parse_args()
 
-@app.route('/')
-def index():
-    return render_template('base.html')
+        username = args['username']
+        password = args['password']
 
+
+
+        user = User.query.filter_by(username=username).all()[0]
+        print "Found user : %r" % user
+        if user and user.password == password:
+            login_user(user)
+        else:
+            raise errors.Permission("Incorrect username or password")
+
+api.add_resource(LoginUser, '/api/login')
+
+
+
+@app.route('/api/logout')
+@login_required
+def logout_cat():
+    message = "Good Bye " + current_user.name
+    print message
+    logout_user()
+    return redirect("http://college.cat")
 
 # Errors
+@app.errorhandler(401)
+def handler_unauthorized(error):
+    response, code = restify(error)
+    return jsonify(response), code
+
 @app.errorhandler(errors.SystemError)
 def handle_system_error(error):
     return restify(error)
@@ -201,21 +243,27 @@ def handle_system_error(error):
 def handle_invalid_usage(error):
     return restify(error)
 
+@app.errorhandler(errors.Permission)
+def handle_permission(error):
+    return restify(error)
 
 def restify(data, status=None):
     if isinstance(data, Exception):
         try:
-            status = int(status or data.status_code or 500)
+            status = int(status or data.status_code)
         except:
-            status = 500
+            try:
+                status = int(data.code or 500)
+            except:
+                status = 500
 
-        data = {'exception': data.message}
+        data = {'exception': data.message or str(data)}
 
     elif isinstance(data, (list, dict)):
         status = int(status or 200)
 
     else:
-        raise errors.SystemError("Restify")
+        raise errors.SystemError("Restify wasn't given correct params")
 
     return {'data': data,
             'status': status}, status
