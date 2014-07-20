@@ -96,6 +96,17 @@ class Subjects(restful.Resource):
 
 api.add_resource(Subjects, '/api/subjects')
 
+class Login(restful.Resource):
+    def get(self, email):
+        parser = reqparse.RequestParser()
+        parser.add_argument('email', type=str, help='user email address')
+        args = parser.parse_args()
+
+        return User.query.filter_by(email=email).first().serialize
+
+api.add_resource(Login, '/api/login/<email>')
+
+
 class UserProfile(restful.Resource):
     def get(self, user_id):
         try:
@@ -140,7 +151,6 @@ def restify(data, status=None):
         status = int(status or 200)
 
     else:
-        print data
         raise errors.SystemError("Restify")
 
     return {'data': data,
