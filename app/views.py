@@ -43,7 +43,6 @@ def handle_invalid_usage(error):
 
 
 def restify(data, status=None):
-
     if isinstance(data, Exception):
         try:
             status = int(status or data.status_code or 500)
