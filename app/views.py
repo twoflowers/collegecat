@@ -19,13 +19,13 @@ api.add_resource(HelloWorld, '/api/')
 
 class Ratings(restful.Resource):
     def get(self, tutor_id):
-        # TODO: Find logged-in user
-        user_id = 300
         parser = reqparse.RequestParser()
         parser.add_argument('rating', type=int, help='Rating of tutor')
         parser.add_argument('comment', type=str, help='Short review of tutor')
+        parser.add_argument('user_id', type=int, help='User ID')
         args = parser.parse_args()
         try:
+            user_id = args['user_id']
             rating = Rating.query.filter_by(user=user_id, tutor=tutor_id).first()
             if not rating:
                 tutor = User.query.get(tutor_id)
@@ -47,13 +47,13 @@ api.add_resource(Ratings, '/api/rating/<int:tutor_id>')
 
 class CreateAppointment(restful.Resource):
     def post(self, tutor_id):
-        # TODO: Find logged-in user
-        user_id = 300
         parser = reqparse.RequestParser()
         parser.add_argument('message', type=str, help='Short message to send to tutor')
         parser.add_argument('subjects', type=str, help='String of subjects')
+        parser.add_argument('user_id', type=int, help='User ID requesting the tutorings')
         args = parser.parse_args()
         try:
+            user_id = args['user_id']
             tutor = User.query.get(tutor_id)
             user = User.query.get(user_id)
         except Exception as e:
@@ -111,7 +111,7 @@ class UserProfile(restful.Resource):
     def get(self, user_id):
         try:
             user = User.query.get(user_id)
-            appointments = Appointment.query.filter_by(user=user_id)
+            appointments = Appointment.query.filter(db.or_(Appointment.user == user_id, Appointment.tutor == user_id))
             return restify(data={
                 'user': user.serialize,
                 'appointments': [appt.serialize for appt in appointments]

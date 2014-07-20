@@ -4,7 +4,7 @@
 $bash_provision = <<EOF
 echo "BLAARG!"
 yum -y install http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-11.ius.centos6.noarch.rpm http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/epel-release-6-5.noarch.rpm
-yum -y install mysql-server python27 python27-pip python27-tools python27-devel vim-enhanced mysql-devel
+yum -y install mysql-server python27 python27-pip python27-tools python27-devel vim-enhanced mysql-devel curl wget
 pip2.7 install -r /var/www/collegecat/requirements.txt
 pip2.7 uninstall simplifycommerce-sdk-python -y
 cd /usr/src; wget -O simplifycommerce-sdk-python-1.1.2.tgz https://www.simplify.com/commerce/static/sdk/python/simplifycommerce-sdk-python-1.1.2.tgz
