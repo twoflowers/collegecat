@@ -81,5 +81,14 @@ String.prototype.capitalize = function() {
     return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
 };
 
+$.get('/api/subjects', function(data) {
+    var subjects = [];
+    for (var index in data) {
+        subjects.push(data[index]['name']);
+    }
+
+    $("#search").typeahead({source: subjects});
+},'json');
+
 // window.onload = function () { get_location() };
 window.onload = function () { set_location('Overland Park, KS'); set_search('test'); };

@@ -16,11 +16,13 @@
     <!-- select 2 css -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2-bootstrap.min.css">
+    <!-- typeahead css -->
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.js"></script>
+    <script src="/static/js/bootstrap3-typeahead.min.js"></script>
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <style type="text/css">
           body {
@@ -123,7 +125,7 @@
           <form class="form-inline navbar-form" role="form">
             <div class="form-group">
               <!-- search box -->
-              <input id="search" name="search" type="text" class="form-control pull-left visible" placeholder="subject, e.g. math, spanish, etc..." style="width: 240px;">
+              <input id="search" name="search" type="text" class="form-control pull-left visible"  data-provide="typeahead" placeholder="subject, e.g. math, spanish, etc..." style="width: 240px;">
             </div>
             <div class="form-group">
               <!-- location box -->
