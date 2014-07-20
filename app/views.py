@@ -74,7 +74,6 @@ class CreateAppointment(restful.Resource):
             db.session.rollback()
             return restify(data={"exception": "%r" % e}, status=500)
 
-api.add_resource(CreateAppointment, '/api/create_appointment/<int:tutor_id>')
 
 class DeleteAppointment(restful.Resource):
     def get(self, appointment_id):
@@ -87,7 +86,10 @@ class DeleteAppointment(restful.Resource):
             db.session.rollback()
             return restify(data={"exception": "%r" % e}, status=500)
 
-api.add_resource(CreateAppointment, '/api/delete_appointment/<int:appointment_id>')
+api.add_resource(DeleteAppointment, '/api/delete_appointment/<int:appointment_id>')
+api.add_resource(CreateAppointment, '/api/create_appointment/<int:tutor_id>')
+
+
 class Subjects(restful.Resource):
     def get(self):
         return [tag.serialize for tag in db.session.query(Tag).all()]
