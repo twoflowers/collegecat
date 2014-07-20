@@ -68,6 +68,35 @@ class SimplifyProcessor(object):
         return True
 
 
+    def create_invoice(self, customer, amount ):
+        user = self.find_user(customer)
+
+        invoice = simplify.Invoice.create({
+            "memo" : "This is a memo",
+            "items" : [{
+                  "amount" : amount,
+                  "quantity" : "1",
+                  "description": "College.Cat Tutoring Session"
+               }],
+            "email" : "customer@mastercard.com",
+            "name" : "Customer Customer",
+            "cucstomer": customer,
+            "note" : "This is a note",
+            "reference" : "Ref2"
+            })
+
+
+        return invoice
+
+    def list_invoices(self, customer):
+        return simplify.Invoice.list()
+
+    def find_invoices(self, invoice_id = ''):
+        return simplify.Invoice.find(invoice_id);
+
+    def pay_invoices(self):
+        return True
+
 class pipl(object):
     def __init__(self):
         self.pipl_api_key = app.config['pipl_key']
@@ -109,18 +138,6 @@ TaggedUsers = db.Table('TaggedUsers',
                        db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                        db.Column('tag_id', db.Integer, db.ForeignKey('Tag.id')),
                        db.Column('created', db.TIMESTAMP, default=datetime.datetime.utcnow))
-
-
-class Price(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    price = db.Column(db.Integer)
-    tag = db.Column(db.Integer, db.ForeignKey('Tag.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    def __init__(self, price, tag, user_id):
-        self.price = price
-        self.tag = tag
-        self.user_id = user_id
 
 
 class User(db.Model):
