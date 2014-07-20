@@ -3,7 +3,9 @@ $('#logout_button').on('click', function() {
     $('#profile_buttons').hide();
     $('#anonymous_buttons').show();
     $('#greet_user').hide();
+    $('#profile_user').hide();
     $('#greet_anonymous').show();
+    $('#why').show();
 });
 
 $('#login_button').on('click', function () {
