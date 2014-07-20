@@ -1,38 +1,42 @@
 from math import sin, cos, radians, acos
 import requests, json
 from app import app
-
-from models import db, Price
+import errors
+from models import db, Price, User
 
 # http://en.wikipedia.org/wiki/Earth_radius
-"""For Earth, the mean radius is 6,371.009 km (˜3,958.761 mi; ˜3,440.069 nmi)"""
+"""For Earth, the mean radius is 6,371.009 km (3,958.761 mi; 3,440.069 nmi)"""
 EARTH_RADIUS_IN_MILES = 3958.761
 
 
-def calc_dist_fixed(lat_a, long_a, lat_b, long_b):
+def calc_dist_fixed(lat_a, lon_a, lat_b, lon_b):
     """
     all angles in degrees, result in miles
     found at http://stackoverflow.com/questions/4716017/django-how-can-i-find-the-distance-between-two-locations
 
     :param lat_a:
-    :param long_a:
+    :param lon_a:
     :param lat_b:
-    :param long_b:
+    :param lon_b:
     :return:
     """
+    lat_a = float(str(lat_a))
+    lon_a = float(str(lon_a))
+    lat_b = float(str(lat_b))
+    lon_b = float(str(lon_b))
     lat_a = radians(lat_a)
     lat_b = radians(lat_b)
-    delta_long = radians(long_a - long_b)
+    delta_lon = radians(lon_a - lon_b)
     cos_x = (
         sin(lat_a) * sin(lat_b) +
-        cos(lat_a) * cos(lat_b) * cos(delta_long)
+        cos(lat_a) * cos(lat_b) * cos(delta_lon)
     )
     return acos(cos_x) * EARTH_RADIUS_IN_MILES
 
 
-class SearchTags():
+class SearchTags(object):
 
-    def filter_by_radius(self, user, tutor, radius):
+    def filter_by_radius(self, user_gps, tutor, radius):
         """
         @TODO Assumes user and tutor has .gps parameter that is a json string
         :param user:
@@ -40,17 +44,16 @@ class SearchTags():
         :param radius:
         :return:
         """
-        user_gps = user.gps.split(',')
-        user_gps = {'lat': user_gps[0], 'lon': user_gps[1]}
-        tutor_gps = tutor.gps.split(',')
-        tutor_gps = {'lat': tutor_gps[0], 'lon': tutor_gps[1]}
-        distance = calc_dist_fixed(user_gps['lat'], user_gps['long'], tutor_gps['lat'], tutor_gps['long'])
-        if distance <= radius:
-            return distance
-        else:
-            return None
+        for tutor_loc in tutor.loc:
+            tutor_gps = tutor_loc.gps.split(',')
+            tutor_gps = {'lat': tutor_gps[0], 'lon': tutor_gps[1]}
+            distance = calc_dist_fixed(user_gps['lat'], user_gps['lon'], tutor_gps['lat'], tutor_gps['lon'])
+            if distance <= radius:
+                return distance
+            else:
+                return None
 
-    def search(self, user, search_term=None, radius=30, max_price=None):
+    def query(self, user_gps, search_term=None, radius=30, max_price=None):
         """
         filter_by using subject
         loop through results
@@ -66,26 +69,34 @@ class SearchTags():
         """
         potential_tutors = []
         filtered_tutors = []
-        # @TODO: Search mysql
+        potential_tutors = db.session.query(User).filter_by(tutor=True).all()
         for tutor in potential_tutors:
-
-            distance = self.filter_by_radius(user, tutor, radius)
+            distance = self.filter_by_radius(user_gps=user_gps, tutor=tutor, radius=radius)
             if not distance:
                 continue
 
-            target_tags = [tag for tag in tutor.tags if search_term in tag]
-            if not target_tags:
-                continue
+            tags = tutor.tags.all()
 
-            if max_price:
+            if search_term: # remove queries that don't result in terms
+                target_tags = [tag for tag in tags if search_term.lower() in tag.name.lower()]
+                if not target_tags:
+                    continue
+            else:  # no filtering via search_term so preserve all tags
+                target_tags = tags
+
+            if max_price is not None:  # remove queries that don't fit in budget
+                max_price = float(max_price)
                 for tag in target_tags:
-                    prices = db.session.query(Price).filter((Price.tag == tag) & (Price.price <= max_price))
+                    prices = db.session.query(Price).filter_by(tag=tag.id).filter(Price.price <= max_price)
+
                     if prices:
+                        print("Adding this to the list the price %r" % prices[0].price)
                         break
                 else:
+                    print "Nothing to add, boo hoo"
                     continue
 
             # Didn't get filtered out, so add them to the list
             filtered_tutors.append(tutor)
-
+        print "I'm returning %r tutors" % len(filtered_tutors)
         return filtered_tutors
