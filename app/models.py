@@ -67,6 +67,7 @@ class SimplifyProcessor(object):
         # @todo not needed for this hack
         return True
 
+
 class pipl(object):
     def __init__(self):
         self.pipl_api_key = app.config['pipl_key']
@@ -108,6 +109,18 @@ TaggedUsers = db.Table('TaggedUsers',
                        db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                        db.Column('tag_id', db.Integer, db.ForeignKey('Tag.id')),
                        db.Column('created', db.TIMESTAMP, default=datetime.datetime.utcnow))
+
+
+class Price(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    price = db.Column(db.Integer)
+    tag = db.Column(db.Integer, db.ForeignKey('Tag.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __init__(self, price, tag, user_id):
+        self.price = price
+        self.tag = tag
+        self.user_id = user_id
 
 
 class User(db.Model):
@@ -155,6 +168,7 @@ class Location(db.Model):
         return '<Location {city}, {state} {zip} (gps:{gps})>'.format(city=self.city, state=self.city,
                                                                      zip=zip, gps=self.gps)
 
+
 class Tag(db.Model):
     __tablename__ = 'Tag'
     id = db.Column(db.Integer, primary_key=True)
@@ -166,6 +180,7 @@ class Tag(db.Model):
 
     def __repr__(self):
         return '<Subject %r>' % self.name
+
 
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -185,5 +200,5 @@ class Rating(db.Model):
             raise RuntimeError("Auto-rating prohibited")
 
     def __repr__(self):
-        return "<Rating {rating} : {comment}>".format(rating= self.rating,
-                                                      comment= self.comment if self.comment else "")
+        return "<Rating {rating} : {comment}>".format(rating=self.rating,
+                                                      comment=self.comment if self.comment else "")
