@@ -125,7 +125,7 @@
           <form class="form-inline navbar-form" role="form">
             <div class="form-group">
               <!-- search box -->
-              <input id="search" name="search" type="text" class="form-control pull-left visible"  data-provide="typeahead" placeholder="subject, e.g. math, spanish, etc..." style="width: 240px;">
+              <input id="search" name="search" type="text" class="form-control pull-left visible"  data-provide="typeahead" autocomplete="off" placeholder="subject, e.g. math, spanish, etc..." style="width: 240px;">
             </div>
             <div class="form-group">
               <!-- location box -->
@@ -151,18 +151,52 @@
             </div>
           </form>
         </div>
-        <div class="navbar-right navbar-form">
+        <div class="navbar-right navbar-form" id="anonymous_buttons">
           <a href="#" class="btn btn-warning">Register</a>
-          <a href="#" class="btn btn-warning">Login</a>
+          <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#login_modal">Login</a>
+        </div>
+        <div class="navbar-right navbar-form" id="profile_buttons" style="display:none;">
+          <a href="#" class="btn btn-default">Profile</a>
+          <a href="#" class="btn btn-warning" id="logout_button">Logout</a>
         </div>
       </div>
       </div>
     </div><!-- end of navbar -->
 
-    <div class="container-narrow">
+      <!-- Modal -->
+      <div class="modal fade" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_login" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title" id="myModalLabel_login">Login</h4>
+            </div>
+            <div class="modal-body">
+              <h4>Username:
+                <input id="email" name="email" type="text" class="form-control visible margin-top-10" placeholder="someone@example.com">
+              </h4>
+              <h4>Password:
+                <input id="password" name="password" type="password" class="form-control visible margin-top-10" placeholder="password">
+              </h4>            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-warning" data-loading-text="Logging in..." id="login_button">Login</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="container-narrow" id="greet_anonymous">
       <h2 class="white center">Register right MEOW!</h2>
       <p class="lead white center">We have tuna flavored treats!</p>
     </div>
+
+    <div class="container-narrow" id="greet_user" style="display:none">
+    </div>
+    <script type="text/html" id="greet_user_template">
+      <h2 class="white center">Hello, <%=name%>!</h2>
+      <p class="lead white center">We hope you are having a great Caturday!</p>
+    </script>
 
     <div class="container-narrow well" id="why">
       <h3>Why register?</h3>
@@ -249,4 +283,5 @@ Intrigued by the shower inspect anything brought into the house yet why must the
   </body>
   <script src="/static/js/template.js"></script>
   <script src="/static/js/search.js"></script>
+  <script src="/static/js/cat.js"></script>
 </html>
