@@ -2,14 +2,23 @@ from flask import jsonify
 from app import app
 from flask.ext import restful
 from flask.ext.restful import reqparse
-from flask import render_template
+from flask.ext.login import LoginManager, login_user, login_required, logout_user, current_user, redirect
+from flask import render_template, request
 from search import SearchTags
 
 import errors
 
 from models import *
 
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 api = restful.Api(app)
+
+@login_manager.user_loader
+def load_user(userid):
+    return User.query.get(userid)
 
 
 class Search(restful.Resource):
@@ -75,6 +84,27 @@ class Ratings(restful.Resource):
 
         return restify(data=args)
 
+    @login_required
+    def post(self, tutor_id):
+        args = request.get_json(force=True)
+        value =  args.get("rating")
+        comment = args.get("comment")
+
+        current_user_id = current_user.id
+
+        try:
+            newRating = Rating(user=current_user_id,
+                               tutor=tutor_id,
+                               rating=value,
+                               comment=comment if comment else None)
+            db.session.add(newRating)
+            db.session.commit()
+        except Exception as e:
+            print "Couldn't add rating because %r" % e
+            db.session.rollback()
+            raise errors.InvalidUsage("Unable to add rating, sorry!")
+
+
 api.add_resource(Ratings, '/api/rating/<int:tutor_id>')
 
 class CreateAppointment(restful.Resource):
@@ -126,6 +156,23 @@ class Subjects(restful.Resource):
     def get(self):
         return [tag.serialize for tag in db.session.query(Tag).all()]
 
+    @login_required
+    def post(self):
+        args = request.get_json(force=True)
+        subject = args.get("subject") or args.get('tag') or args.get("name")
+        if subject:
+            try:
+                new_tag = Tag(name=subject)
+                db.session.add(new_tag)
+                db.session.commit()
+            except Exception as e:
+                print "Couldn't add tag because %r" % e
+                db.session.rollback()
+                raise errors.SystemError("Unable to add subject, sorry!")
+        else:
+            raise errors.InvalidUsage("Please provide a subject")
+
+
 api.add_resource(Subjects, '/api/subjects')
 
 class Login(restful.Resource):
@@ -134,9 +181,9 @@ class Login(restful.Resource):
         parser.add_argument('email', type=str, help='user email address')
         args = parser.parse_args()
 
-        return User.query.filter_by(email=email).first().serialize
-
 api.add_resource(Login, '/api/login/<email>')
+
+
 
 
 class UserProfile(restful.Resource):
@@ -185,39 +232,94 @@ class CreateInvoice(restful.Resource):
 
 api.add_resource(CreateInvoice, '/api/create_invoice/<int:appointment_id>/<int:session_amount>')
 
+class LoginCat(restful.Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('username', type=str, help='user name', required=True)
+        parser.add_argument('password', type=str, help='user password', required=True)
+        args = parser.parse_args()
 
-@app.route('/')
-def index():
-    return render_template('base.html')
+        username = args['username']
+        password = args['password']
 
+
+
+        cat = User.query.filter_by(username=username).all()[0]
+        print "Found user : %r" % cat
+        if cat and cat.password == password:
+            login_user(cat)
+        else:
+            raise errors.Permission("Incorrect username or password")
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('username', type=str, help='user name', required=True)
+        parser.add_argument('password', type=str, help='user password', required=True)
+        args = parser.parse_args()
+
+        username = args['username']
+        password = args['password']
+
+
+
+        cat = User.query.filter_by(username=username).all()[0]
+        print "Found user : %r" % cat
+        if cat and cat.password == password:
+            login_user(cat)
+        else:
+            raise errors.Permission("Incorrect username or password")
+
+api.add_resource(LoginCat, '/api/login')
+
+
+
+@app.route('/api/logout', methods=['GET', 'POST'])
+@login_required
+def logout_cat():
+    message = "Good Bye " + current_user.name  + ", come again!"
+    print message
+    logout_user()
+    return redirect("http://college.cat")
 
 # Errors
+@app.errorhandler(401)
+def handler_unauthorized(error):
+    response, code = restify(error)
+    return jsonify(response), code
+
 @app.errorhandler(errors.SystemError)
 def handle_system_error(error):
-    return restify(error)
+    response, code = restify(error)
+    return jsonify(response), code
 
 
 @app.errorhandler(errors.InvalidUsage)
 def handle_invalid_usage(error):
     return restify(error)
 
+@app.errorhandler(errors.Permission)
+def handle_permission(error):
+    return restify(error)
 
 def restify(data, status=None):
     if isinstance(data, Exception):
         try:
-            status = int(status or data.status_code or 500)
+            status = int(status or data.status_code)
         except:
-            status = 500
+            try:
+                status = int(data.code or 500)
+            except:
+                status = 500
 
-        data = {'exception': data.message}
+        data = {'exception': data.message or str(data)}
 
     elif isinstance(data, (list, dict)):
         status = int(status or 200)
 
     else:
-        raise errors.SystemError("Restify")
+        raise errors.SystemError("Restify wasn't given correct params")
 
-    return {'data': data,
+    return {'data': data or {},
             'status': status}, status
 
 
