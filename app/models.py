@@ -169,13 +169,16 @@ class User(db.Model):
     tutor = db.Column(db.Boolean, default=True)
     tags = db.relationship('Tag', secondary=TaggedUsers, backref='tag', lazy='dynamic')
     phone = db.Column(db.String(20))
+    youtube = db.Column(db.String(255), nullable=True)
 
-    def __init__(self, username, password, email, name, phone):
+    def __init__(self, username, password, email, name, phone, payment="", youtube=""):
         self.username = username
         self.password = password
         self.email = email
         self.name = name
         self.phone = phone
+        self.youtube = youtube
+        self.payment = payment
 
 
     def __repr__(self):
@@ -194,7 +197,8 @@ class User(db.Model):
            'location': [loc.serialize for loc in self.loc],
            'tags': [tag.serialize for tag in self.tags],
            'phone': self.phone,
-
+           'youtube': self.youtube,
+           'payment': self.payment
        }
 
 

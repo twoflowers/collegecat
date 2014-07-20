@@ -62,6 +62,7 @@ subjects = [
     'Game Development',
     'Geoscience',
     'Global & International Studies',
+    'Goat Herding',
     'Graphic Design',
     'Health Care',
     'Health Care Info Systems',
@@ -119,6 +120,7 @@ subjects = [
     'Theater',
     'Underwater Basket Weaving',
     'Women and Gender Studies',
+    'World of Warcraft'
 ]
 
 users_added = 0
@@ -126,8 +128,6 @@ tags_added = 0
 ratings_added = 0
 
 for row in csv_file:
-    #print row
-    #time.sleep(0.5)
     newLoc = models.Location(
         street=row['StreetAddress'],
         city=row['City'],
@@ -141,7 +141,8 @@ for row in csv_file:
         username=row['Username'].lower(),
         password=row['Password'],
         email=row['EmailAddress'],
-        phone=row['TelephoneNumber']
+        phone=row['TelephoneNumber'],
+        payment='B6Epo8Kn'
     )
     newUser.loc.append(newLoc)
     db.session.add(newLoc)
@@ -166,6 +167,7 @@ for row in csv_file:
                 newTag = models.Tag.query.filter_by(name=tag).first()
                 newUser.tags.append(newTag)
                 db.session.commit()
+                sys.stdout.write("+")
             except:
                 db.session.rollback()
                 continue
@@ -210,10 +212,10 @@ for row in csv_file:
                 db.session.rollback()
                 continue
 
+        sys.stdout.write(".")
+        sys.stdout.flush()
 
-
-    print "Added: %r" % row
-
+print ""
 print "Added Users: %s Ratings: %s Tags: %s" % (
     users_added,
     ratings_added,
