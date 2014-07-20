@@ -15,7 +15,21 @@ $('#login_button').on('click', function () {
         url: "/api/login/" + $('#email').val(),
     })
     .done(function(data) {
-        profile = data;
+        login(data, login_button);
+    })
+    .error(function () {
+        login_button.button('reset')
+    });
+});
+
+function login(data, login_button) {
+    $.ajax({
+        url: "/api/profile/" + data['id'],
+    })
+    .done(function(data) {
+        profile = data['data'];
+        console.log('Profile', profile);
+
         $('#profile_buttons').show();
         $('#anonymous_buttons').hide();
         $('#login_modal').modal('hide');
@@ -24,16 +38,78 @@ $('#login_button').on('click', function () {
         $('#why').hide();
 
         greet_container = $('#greet_user');
-        var greet_html = tmpl('greet_user_template', profile);
+        var greet_html = tmpl('greet_user_template', profile['user']);
         greet_container.html(greet_html).show();
 
         profile_container = $('#profile_user');
         var profile_html = tmpl('profile_user_template', profile);
         profile_container.html(profile_html).show();
-    }).always(function () {
-        login_button.button('reset')
+
+        $('.delete_appt').on('click', function() {
+            delete_appt($(this));
+        });
+    })
+    .always(function () {
+        if (typeof login_button != 'undefined') {
+            login_button.button('reset');
+        }
     });
+}
+
+function delete_appt(element) {
+    var id = element.data('appointment-id');
+    element.button('loading');
+
+    $.ajax({
+        url: "/api/delete_appointment/" + id,
+    })
+    .done(function(data) {
+        login(profile['user']);
+    })
+    .always(function () {
+        element.button('reset');
+    });
+}
+
+$('#profile_button').on('click', function () {
+    if (profile) {
+        $('#greet_user').show();
+    } else {
+        $('#greet_anonymous').show();
+        $('#why').show();
+    }
+
+    $('#search_results').hide();
+    $('#profile_user').show();
 });
+
+function send_message(element) {
+    var id = element.data('contact-id');
+    element.button('loading');
+
+    var subject = '';
+
+    $("#subject_" + id + " option:selected").each(function() {
+        subject += $(this).text() + " ";
+    });
+
+    $.ajax({
+        url: "/api/create_appointment/" + id,
+        type: 'POST',
+        data: {
+            'user_id': profile['user']['id'],
+            'subject': subject,
+            'message': $('#contact_message_' + id).val()
+        }
+    })
+    .done(function(data) {
+        $('#contact_' + id).modal('hide');
+        login(profile['user']);
+    })
+    .always(function () {
+        element.button('reset')
+    });
+}
 
 $('#profile_button').on('click', function () {
     if (profile) {

@@ -29,7 +29,7 @@ function search(subject, location, radius) {
 function populate_search_results() {
     // TODO: populate search results
     var data = [
-        {'id': 12345, 'name': 'Tom Martin',    'rating': 3, 'price': [12, 10, 1], 'subjects': ['math', 'programming', 'sheep'], 'availability': 'Anytime', 'bio': 'yo', 'latitude': '38.9237738', 'longitude': '-94.7306424'},
+        {'id': 346, 'name': 'Tom Martin',    'rating': 3, 'price': [12, 10, 1], 'subjects': ['math', 'programming', 'sheep'], 'availability': 'Anytime', 'bio': 'yo', 'latitude': '38.9237738', 'longitude': '-94.7306424'},
         {'id': 12346, 'name': 'Stan Antov',    'rating': 5, 'price': [100, 5, 120], 'subjects': ['design', 'programming', 'goats'], 'availability': 'Anytime', 'bio': 'yo', 'latitude': '38.9237738', 'longitude': '-94.7306424'},
         {'id': 12347, 'name': 'Marc Streeter', 'rating': 4, 'price': [150], 'subjects': ['chupacabras'], 'availability': 'Anytime', 'bio': 'yo', 'latitude': '38.9237738', 'longitude': '-94.7306424'},
     ];
@@ -52,6 +52,10 @@ function populate_search_results() {
     for (var index in ids) {
         $('#subjects_' + ids[index]).select2({});
     }
+
+    $('.request_appt_button').on('click', function () {
+        send_message($(this));
+    });
 }
 
 function get_location() {
