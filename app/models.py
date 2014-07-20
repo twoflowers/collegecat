@@ -89,7 +89,9 @@ class SimplifyProcessor(object):
 
         return {
             'success': True,
-            'status': 200
+            'status': 200,
+            'invoiceId': invoice['invoiceId'],
+            'id': invoice['id']
         }
 
 
