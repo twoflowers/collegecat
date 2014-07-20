@@ -125,7 +125,7 @@ tags_added = 0
 ratings_added = 0
 
 for row in csv_file:
-    print row
+    #print row
     #time.sleep(0.5)
     newLoc = models.Location(
         street=row['StreetAddress'],
@@ -151,10 +151,8 @@ for row in csv_file:
         db.session.rollback()
         continue
 
-
     tags = random.sample(subjects, random.randint(0, 6))
     for tag in tags:
-        print "Adding course tag: %s" % tag
         try:
             newTag = models.Tag(tag)
             newUser.tags.append(newTag)
@@ -170,6 +168,16 @@ for row in csv_file:
                 db.session.rollback()
                 continue
             continue
+
+        try:
+            newPrice = models.Price(price=random.randint(100, 100000), tag=newTag.id, user_id=newUser.id)
+            db.session.add(newPrice)
+            db.session.commit()
+        except Exception as e:
+            print "There was an exception adding a price because %r " % e
+            db.session.rollback()
+
+    # print "Adding course tags: %s" % tags
 
     total_users = db.session.query(models.User).count()
     if random.randint(0, 1000) > 500:
@@ -196,9 +204,13 @@ for row in csv_file:
                 db.session.commit()
                 ratings_added += 1
             except Exception as e:
-                print "Exception: %r" % e
+                #print "Exception: %r" % e
                 db.session.rollback()
                 continue
+
+
+
+    print "Added: %r" % row
 
 print "Added Users: %s Ratings: %s Tags: %s" % (
     users_added,
