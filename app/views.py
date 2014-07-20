@@ -143,7 +143,7 @@ class UserProfile(restful.Resource):
     def get(self, user_id):
         try:
             user = User.query.get(user_id)
-            appointments = Appointment.query.filter(db.or_(Appointment.user == user_id, Appointment.tutor == user_id))
+            appointments = Appointment.query.filter(db.or_(Appointment.user == user_id, Appointment.tutor == user_id)).order_by(Appointment.created)
             return restify(data={
                 'user': user.serialize,
                 'appointments': [appt.serialize for appt in appointments]
