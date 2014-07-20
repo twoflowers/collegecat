@@ -36,7 +36,10 @@ function populate_search_results() {
 
     if (data) {
         $('#why').hide();
+        $('#profile_user').hide();
+        $('#search_results').show();
     }
+
     results_container = $('#search_results');
     var results_html = '';
     var ids = [];
