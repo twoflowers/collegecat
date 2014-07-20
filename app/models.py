@@ -165,6 +165,15 @@ class User(db.Model):
         return '<User {name}({username})email:{email}>'.format(name=self.name, email=self.email, username=self.username)
 
 
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+           'id': self.id,
+           'username': self.username
+       }
+
+
 class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     street = db.Column(db.String(50), nullable=True)
@@ -198,6 +207,14 @@ class Tag(db.Model):
     def __repr__(self):
         return '<Subject %r>' % self.name
 
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+           'id': self.id,
+           'name': self.name
+           # 'users' : [user.serialize for user in self.users]
+       }
 
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True)
