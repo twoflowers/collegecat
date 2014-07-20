@@ -137,6 +137,11 @@ class CreateAppointment(restful.Resource):
             return restify(data={"exception": "%r" % e}, status=500)
 
 
+@app.route('/')
+def index():
+    return render_template('base.html')
+
+
 class DeleteAppointment(restful.Resource):
     def get(self, appointment_id):
         try:
