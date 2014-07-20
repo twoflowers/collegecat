@@ -155,6 +155,14 @@ for row in csv_file:
         continue
 
     tags = random.sample(subjects, random.randint(0, 6))
+    if newUser.username == 'santov':
+        tags.append('Bulgarian')
+    elif newUser.username == 'marcs':
+        tags.append('Spanish')
+        tags.append('Chupacabras')
+    elif newUser.username == 'tmartin':
+        tags.append('Underwater Basket Weaving')
+        
     for tag in tags:
         try:
             newTag = models.Tag(tag)
@@ -174,7 +182,7 @@ for row in csv_file:
             continue
 
         try:
-            newPrice = models.Price(price=random.randint(100, 100000), tag=newTag.id, user_id=newUser.id)
+            newPrice = models.Price(price=random.randint(500, 4200), tag=newTag.id, user_id=newUser.id)
             db.session.add(newPrice)
             db.session.commit()
         except Exception as e:
