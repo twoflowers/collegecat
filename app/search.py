@@ -28,12 +28,7 @@ def calc_dist_fixed(lat_a, long_a, lat_b, long_b):
     return acos(cos_x) * EARTH_RADIUS_IN_MILES
 
 
-class search_tutors():
-    class TUTOR_OUT_OF_RADIUS(Exception):
-        pass
-
-    def __init__(self):
-        pass
+class SearchTags():
 
     def filter_by_radius(self, user, tutor, radius):
         """
@@ -43,15 +38,17 @@ class search_tutors():
         :param radius:
         :return:
         """
-        user_gps  = json.loads(user.gps)
-        tutor_gps = json.loads(tutor.gps)
+        user_gps = user.gps.split(',')
+        user_gps = {'lat': user_gps[0], 'lon': user_gps[1]}
+        tutor_gps = tutor.gps.split(',')
+        tutor_gps = {'lat': tutor_gps[0], 'lon': tutor_gps[1]}
         distance = calc_dist_fixed(user_gps['lat'], user_gps['long'], tutor_gps['lat'], tutor_gps['long'])
-        if distance > radius:
-            raise self.TUTOR_OUT_OF_RADIUS
-        else:
+        if distance <= radius:
             return distance
+        else:
+            return None
 
-    def search(self, user, search_term=None, radius=30, max_price=None):
+    def search(self, user, search_term=None, radius=30):
         """
         filter_by using subject
         loop through results
@@ -62,24 +59,20 @@ class search_tutors():
         :param search_term:
         :param user:
         :param radius:
-        :param max_price:
         :return:
         """
         potential_tutors = []
         filtered_tutors = []
         # @TODO: Search mysql
         for tutor in potential_tutors:
-            try:
-                tutor['distance'] = self.filter_by_radius(user, tutor, radius)
-            except self.TUTOR_OUT_OF_RADIUS:
-                # Tutor too far away, yo
+
+            distance = self.filter_by_radius(user, tutor, radius)
+            if not distance:
                 continue
 
             if not search_term in tutor.subjects:
                 continue
 
-            if max_price and tutor.price >= max_price:
-                continue
 
             # Didn't get filtered out, so add them to the list
             filtered_tutors.append(tutor)
