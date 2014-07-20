@@ -4,12 +4,12 @@
 $bash_provision = <<EOF
 echo "BLAARG!"
 yum -y install http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-11.ius.centos6.noarch.rpm http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/epel-release-6-5.noarch.rpm
-yum -y install mysql-server python27 python27-pip python27-tools python27-devel vim-enhanced
+yum -y install mysql-server python27 python27-pip python27-tools python27-devel vim-enhanced mysql-devel
 pip2.7 install -r /var/www/collegecat/requirements.txt
 chkconfig mysqld on
 service mysqld start
-mysql -e 'GRANT ALL PRIVILEGES ON *.* TO "collegecat"@"%" IDENTIFIED BY "UrNotAG04t"; FLUSH PRIVILEGES';
-mysql -e 'CREATE DATABASE collegecat;'
+mysql -uroot -e 'GRANT ALL PRIVILEGES ON *.* TO "collegecat"@"localhost" IDENTIFIED BY "UrNotAG04t"; FLUSH PRIVILEGES';
+mysql -uroot -e 'CREATE DATABASE collegecat;'
 #rm -fv /etc/nginx/conf.d/default.conf
 #cp -v /var/www/collegecat/nginx.conf /etc/nginx/conf.d/collegecat.conf
 #mkdir -pv /var/log/uwsgi/ /etc/supervisord.d

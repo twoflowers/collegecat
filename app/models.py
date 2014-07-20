@@ -67,6 +67,25 @@ class SimplifyProcessor(object):
         # @todo not needed for this hack
         return True
 
+class pipl(object):
+    def __init__(self):
+        self.pipl_api_key = app.config['pipl_key']
+        self.pipl_api_url = app.config['pipl_key']
+
+    def search (self, user_id, first_name, last_name, email_address):
+        # @todo update user table with information
+        # @todo clean up the return value
+        url = "%sfirst_name=%s&last_name=%s&email=%s&key=%s&pretty=true" % (
+            self.pipl_api_url,
+            first_name,
+            last_name,
+            email_address,
+            self.pipl_api_key)
+
+        req = requests.get(url)
+
+        return req.json()
+
 
 def sendgrid(object):
     def __init__(self):
@@ -84,7 +103,15 @@ def sendgrid(object):
         self.email.send(message)
 
 
+TaggedUsers = db.Table('TaggedUsers',
+                       db.Column("id", db.Integer, primary_key=True),
+                       db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                       db.Column('tag_id', db.Integer, db.ForeignKey('Tag.id')),
+                       db.Column('created', db.TIMESTAMP, default=datetime.datetime.utcnow))
+
+
 class User(db.Model):
+    __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
@@ -94,12 +121,15 @@ class User(db.Model):
     bio = db.Column(db.String(1000), nullable=True)
     loc = db.relationship("Location", backref="user")
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    tutor = db.Column(db.Boolean, default=True)
+    tags = db.relationship('Tag', secondary=TaggedUsers, backref='tag', lazy='dynamic')
 
     def __init__(self, username, password, email, name):
         self.username = username
         self.password = password
         self.email = email
         self.name = name
+
 
     def __repr__(self):
         return '<User {name}({username})email:{email}>'.format(name=self.name, email=self.email, username=self.username)
@@ -125,18 +155,11 @@ class Location(db.Model):
         return '<Location {city}, {state} {zip} (gps:{gps})>'.format(city=self.city, state=self.city,
                                                                      zip=zip, gps=self.gps)
 
-TaggedTutors = db.Table('TaggedTutors',
-                        db.Column("id", db.Integer, primary_key=True),
-                        db.Column('tutor_id', db.Integer, db.ForeignKey('Tutor.id')),
-                        db.Column('tag_id', db.Integer, db.ForeignKey('Tag.id')),
-                        db.Column('created', db.TIMESTAMP, default=datetime.datetime.utcnow))
-
-
 class Tag(db.Model):
     __tablename__ = 'Tag'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    tutors = db.relationship('Tutor', secondary=TaggedTutors, backref='tutor', lazy='dynamic')
+    users = db.relationship('User', secondary=TaggedUsers, backref='user', lazy='dynamic')
 
     def __init__(self, name):
         self.name = name
@@ -144,18 +167,10 @@ class Tag(db.Model):
     def __repr__(self):
         return '<Subject %r>' % self.name
 
-
-class Tutor(db.Model):
-    __tablename__ = 'Tutor'
-    id = db.Column(db.Integer, primary_key=True)
-    user = db.Column(db.Integer, db.ForeignKey(User.id))
-    tags = db.relationship('Tag', secondary=TaggedTutors, backref='tag', lazy='dynamic')
-
-
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user = db.Column(db.Integer, db.ForeignKey(User.id))
-    tutor = db.Column(db.Integer, db.ForeignKey(Tutor.id))
+    tutor = db.Column(db.Integer, db.ForeignKey(User.id))
     rating = db.Column(db.Integer)
     comment = db.Column(db.String(1000), nullable=True)
     created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
