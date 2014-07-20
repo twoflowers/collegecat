@@ -15,6 +15,7 @@ $('#login_button').on('click', function () {
         url: "/api/login?username=" + $('#email').val() + "&password=" + $('#password').val()
     })
     .done(function(data) {
+        data['id'] = data['user_id'];
         login(data, login_button);
     })
     .error(function () {
@@ -24,7 +25,7 @@ $('#login_button').on('click', function () {
 
 function login(data, login_button) {
     $.ajax({
-        url: "/api/profile/" + data['user_id'],
+        url: "/api/profile/" + data['id'],
     })
     .done(function(data) {
         profile = data['data'];
