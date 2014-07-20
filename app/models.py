@@ -225,7 +225,9 @@ class Location(db.Model):
             'city': self.city,
             'state': self.state,
             'zip': self.zip,
-            'gps': self.gps
+            'gps': self.gps,
+            'lat': self.gps.split(',')[0],
+            'lon': self.gps.split(',')[1]
         }
 
 
